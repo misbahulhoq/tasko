@@ -1,10 +1,10 @@
 "use client";
-import { ISignupForm } from "@/interfaces/signupdata";
-
+import { ISignupData } from "@/interfaces/signupdata";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 
 const SignUpPage = () => {
   const {
@@ -12,15 +12,20 @@ const SignUpPage = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ISignupForm>();
+  } = useForm<ISignupData>();
   const [visibiliy, setVisibility] = useState({
     password: false,
     confirmPassword: false,
   });
+  const router = useRouter();
   const password = watch("password");
 
-  const onSubmit: SubmitHandler<ISignupForm> = (data: ISignupForm) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ISignupData> = (data: ISignupData) => {
+    (async () => {
+      localStorage.setItem("signupEmail", data.email);
+    })().then(() => {
+      router.push("/verify-otp?type=signup");
+    });
   };
   return (
     <section className="bg-base-200 grid min-h-screen lg:grid-cols-2">
