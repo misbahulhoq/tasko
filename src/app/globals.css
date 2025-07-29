@@ -17,4 +17,7 @@
   .container-center {
     @apply mx-auto w-11/12 max-w-7xl;
   }
+  .btn {
+    @apply rounded-md;
+  }
 }
