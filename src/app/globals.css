@@ -21,3 +21,12 @@
     @apply rounded-md;
   }
 }
+
+@layer base {
+  p {
+    @apply text-[#667085];
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
