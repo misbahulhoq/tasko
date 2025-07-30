@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useEffect, useState, useRef, Ref } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const maskEmail = (email: string | null) => {
   if (email) {
@@ -14,6 +14,7 @@ const maskEmail = (email: string | null) => {
     return mail[0] + maskedPart + mail[mail.length - 1] + "@" + domain;
   }
 };
+
 const VerifyOtpPage = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [message, setMessage] = useState("");
@@ -23,7 +24,6 @@ const VerifyOtpPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeOfOtp = searchParams.get("type") as "signup" | "login";
-  console.log(typeOfOtp === "signup");
 
   useEffect(() => {
     (async () => {
