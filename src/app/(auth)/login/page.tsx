@@ -112,12 +112,16 @@ const LoginPage = () => {
           </div>
           <div className="bottom-area-wrapper mx-auto max-w-[550px]">
             <span className="divider">OR</span>
-            <p className="text-center">
-              Don&apos;t have an account?{"  "} &nbsp;
-              <Link href={"/signup"} className="text-black">
-                Sign Up
-              </Link>
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-center">
+                Don&apos;t have an account?{"  "} &nbsp;
+                <Link href={"/signup"} className="text-black">
+                  Sign Up
+                </Link>
+              </p>
+
+              <Link href={"/forgot-password"}>Forgot Password</Link>
+            </div>
           </div>
         </div>
       </div>
