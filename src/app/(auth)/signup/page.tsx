@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SignUpPage = () => {
   const {
@@ -42,7 +43,7 @@ const SignUpPage = () => {
       </div>
 
       <div className="right-column min-h-screen p-6 lg:col-span-1 lg:p-16">
-        <div>
+        <div className="mb-6">
           <h2 className="mb-2 text-center text-4xl font-semibold">Signup </h2>
           <p className="text-center">
             To Create Account, Please Fill in the From Below.
@@ -174,6 +175,16 @@ const SignUpPage = () => {
               Signup
             </button>
           </form>
+        </div>
+
+        <div className="bottom-area-wrapper mx-auto max-w-[550px]">
+          <span className="divider">OR</span>
+          <p className="text-center">
+            Already have an account?{"  "} &nbsp;
+            <Link href={"/login"} className="text-black">
+              Log In
+            </Link>
+          </p>
         </div>
       </div>
     </section>
