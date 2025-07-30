@@ -1,10 +1,17 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Ref } from "react";
 
 const maskEmail = (email: string | null) => {
   if (email) {
-    return email.slice(0, 3);
+    const [mail, domain] = email.split("@");
+    const maskedPart = mail
+      .slice(1, mail.length - 1)
+      .split("")
+      .map(() => "*")
+      .join("");
+
+    return mail[0] + maskedPart + mail[mail.length - 1] + "@" + domain;
   }
 };
 const VerifyOtpPage = () => {
@@ -20,9 +27,9 @@ const VerifyOtpPage = () => {
 
   useEffect(() => {
     (async () => {
-      setEmail(localStorage.getItem("signupEmail"));
+      setEmail(localStorage.getItem("email"));
     })().then(() => {
-      if (!localStorage.getItem("signupEmail")) {
+      if (!localStorage.getItem("email")) {
         router.push(typeOfOtp);
       }
     });
@@ -73,12 +80,14 @@ const VerifyOtpPage = () => {
 
   return (
     <section className="bg-base-200 flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+      <div className="bg-base-100 w-full max-w-md rounded-2xl p-8 shadow-xl">
         <h2 className="mb-4 text-center text-2xl font-bold">
           🔐 Verify Your Code
         </h2>
-        <p className="mb-6 text-center text-gray-500">
-          We sent a 6-digit code to your email: {email}.
+        <p className="mb-6 text-center">
+          We sent a 6-digit code to your email:
+          <br />
+          <strong>{maskEmail(email)}</strong>
           <br /> Please enter it below.
         </p>
 
@@ -90,17 +99,19 @@ const VerifyOtpPage = () => {
                 type="text"
                 maxLength={1}
                 value={digit}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
                 onChange={(e) => handleChange(e.target.value, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="h-14 w-12 rounded-md border border-gray-300 text-center text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="focus:ring-primary h-14 w-12 rounded-md border border-gray-300 text-center text-xl focus:ring-2 focus:outline-none"
               />
             ))}
           </div>
 
-          {error && <p className="text-center text-sm text-red-500">{error}</p>}
+          {error && <p className="text-error text-center text-sm">{error}</p>}
           {message && (
-            <p className="text-center text-sm text-green-600">{message}</p>
+            <p className="text-success text-center text-sm">{message}</p>
           )}
 
           <button type="submit" className="btn btn-primary w-full rounded-lg">

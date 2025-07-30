@@ -22,7 +22,7 @@ const SignUpPage = () => {
 
   const onSubmit: SubmitHandler<ISignupData> = (data: ISignupData) => {
     (async () => {
-      localStorage.setItem("signupEmail", data.email);
+      localStorage.setItem("email", data.email);
     })().then(() => {
       router.push("/verify-otp?type=signup");
     });
@@ -59,8 +59,8 @@ const SignUpPage = () => {
               <input
                 id="fullName"
                 type="text"
-                className="input bg-base-100 w-full max-w-[550px] outline-none focus:outline-0"
-                placeholder="Enter your full name"
+                className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
+                placeholder="Enter your full name "
                 {...register("fullName", { required: "Full name is required" })}
               />
               {errors.fullName && (
@@ -77,7 +77,7 @@ const SignUpPage = () => {
               <input
                 id="email"
                 type="email"
-                className="input bg-base-100 w-full max-w-[550px] outline-none focus:outline-0"
+                className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
                 placeholder="Enter your email address"
                 {...register("email", { required: "Email is required" })}
               />
@@ -95,7 +95,7 @@ const SignUpPage = () => {
               <input
                 id="password"
                 type={visibiliy.password ? "text" : "password"}
-                className="input bg-base-100 w-full max-w-[550px] outline-none focus:outline-0"
+                className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
                 placeholder="Enter your password"
                 {...register("password", {
                   required: "Password is required",
@@ -140,7 +140,7 @@ const SignUpPage = () => {
                 id="confirmPassword"
                 type={visibiliy.confirmPassword ? "text" : "password"}
                 placeholder="Retype password"
-                className="input bg-base-100 w-full max-w-[550px] outline-none focus:outline-0"
+                className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
                 {...register("confirmPassword", {
                   required: "Pleae confirm your password",
                   validate: (value) =>
