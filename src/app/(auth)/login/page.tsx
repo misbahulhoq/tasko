@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ILogin } from "@/interfaces/login.interface";
 
-const SignUpPage = () => {
+const LoginPage = () => {
   const {
     register,
     handleSubmit,
@@ -125,4 +125,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default LoginPage;
