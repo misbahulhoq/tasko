@@ -1,5 +1,5 @@
 "use client";
-import { useGetUserEmailQuery } from "@/redux/features/auth/getUserEmailSlice";
+import { useGetUserEmailQuery } from "@/redux/features/auth/authApiSlice";
 import { useVerifyAccountMutation } from "@/redux/features/auth/verifyAccountSlice";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
@@ -20,10 +20,12 @@ const maskEmail = (email: string | undefined) => {
 
 const VerifyOtpPage = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [message, setMessage] = useState("");
+  const [message] = useState("");
   const [error, setError] = useState("");
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [email, setEmail] = useState<string | null>(null);
+  const [timer, setTimer] = useState(60);
+  const [canResend, setCanResend] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeOfOtp = searchParams.get("type") as "signup" | "login";
@@ -44,6 +46,17 @@ const VerifyOtpPage = () => {
       }
     });
   }, [email, router, typeOfOtp]);
+
+  useEffect(() => {
+    if (!canResend && timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else if (timer === 0) {
+      setCanResend(true);
+    }
+  }, [timer, canResend]);
 
   const handleChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return;
@@ -94,17 +107,47 @@ const VerifyOtpPage = () => {
         console.log(res);
         if (res.success) {
           //do something
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: res.message,
+          });
         }
       })
       .catch((err) => {
+        console.log(err);
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           text: err.data.message,
         });
       });
+  };
+
+  const handleResend = () => {
+    console.log("Resending verification code...");
+    setCanResend(false);
+    setTimer(60);
+    setOtp(Array(6).fill(""));
+    inputRefs.current[0]?.focus();
+    // getNewSignupCode(undefined)
+    //   .unwrap()
+    //   .then((res) => {
+    //     if (res.success) {
+    //       Swal.fire({
+    //         icon: "success",
+    //         title: "Success",
+    //         text: res.message,
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Oops...",
+    //       text: err.data.message,
+    //     });
+    //   });
   };
 
   if (isError) {
@@ -169,6 +212,14 @@ const VerifyOtpPage = () => {
             Verify Code
           </button>
         </form>
+
+        <button
+          className="btn btn-outline btn-primary btn-sm mt-2 ml-auto flex justify-end"
+          onClick={handleResend}
+          disabled={!canResend}
+        >
+          {canResend ? "Request New Code" : `Request a new code in ${timer}s`}
+        </button>
       </div>
     </section>
   );

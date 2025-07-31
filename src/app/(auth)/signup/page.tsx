@@ -4,10 +4,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSignupMutation } from "@/redux/features/auth/signupSlice";
 import Swal from "sweetalert2";
+import { useSignupMutation } from "@/redux/features/auth/authApiSlice";
+import { useRouter } from "next/navigation";
 
 const SignUpPage = () => {
   const {
@@ -20,17 +20,23 @@ const SignUpPage = () => {
     password: false,
     confirmPassword: false,
   });
-  const router = useRouter();
   const password = watch("password");
   const [signup, { isLoading }] = useSignupMutation();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<ISignupData> = (data: ISignupData) => {
     signup(data)
       .unwrap()
       .then((data) => {
-        console.log(data);
-        localStorage.setItem("email", data.email);
-        router.push("/verify-otp?type=signup");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: data.message,
+        });
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
       })
       .catch((error) => {
         Swal.fire({
