@@ -25,8 +25,29 @@ const authApiSlice = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+
+    requestNewOtp: builder.mutation<Response, void>({
+      query: (data) => ({
+        url: "/auth/request-new-otp",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    verifyLoginCode: builder.mutation<Response, { code: string }>({
+      query: (data) => ({
+        url: "/auth/verify-login",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetUserEmailQuery, useSignupMutation, useLoginMutation } =
-  authApiSlice;
+export const {
+  useGetUserEmailQuery,
+  useSignupMutation,
+  useLoginMutation,
+  useRequestNewOtpMutation,
+  useVerifyLoginCodeMutation,
+} = authApiSlice;

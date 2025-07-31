@@ -1,7 +1,11 @@
 "use client";
-import { useGetUserEmailQuery } from "@/redux/features/auth/authApiSlice";
-import { useVerifyAccountMutation } from "@/redux/features/auth/verifyAccountSlice";
-import { useSearchParams, useRouter } from "next/navigation";
+import {
+  useGetUserEmailQuery,
+  useRequestNewOtpMutation,
+  useVerifyLoginCodeMutation,
+} from "@/redux/features/auth/authApiSlice";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 
@@ -23,12 +27,9 @@ const VerifyOtpPage = () => {
   const [message] = useState("");
   const [error, setError] = useState("");
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const [email, setEmail] = useState<string | null>(null);
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const typeOfOtp = searchParams.get("type") as "signup" | "login";
   const {
     data: user,
     isLoading,
@@ -36,19 +37,11 @@ const VerifyOtpPage = () => {
     isError,
   } = useGetUserEmailQuery();
   const [verifyAccount, { isLoading: isLoadingVerify }] =
-    useVerifyAccountMutation();
-  useEffect(() => {
-    (async () => {
-      setEmail(localStorage.getItem("email"));
-    })().then(() => {
-      if (!localStorage.getItem("email")) {
-        router.push(typeOfOtp);
-      }
-    });
-  }, [email, router, typeOfOtp]);
+    useVerifyLoginCodeMutation();
+  const [getNewOtp] = useRequestNewOtpMutation();
 
   useEffect(() => {
-    if (!canResend && timer > 0) {
+    if (!canResend && timer > 0 && user) {
       const interval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
@@ -56,7 +49,7 @@ const VerifyOtpPage = () => {
     } else if (timer === 0) {
       setCanResend(true);
     }
-  }, [timer, canResend]);
+  }, [timer, canResend, user]);
 
   const handleChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return;
@@ -106,21 +99,26 @@ const VerifyOtpPage = () => {
       .then((res) => {
         console.log(res);
         if (res.success) {
-          //do something
           Swal.fire({
             icon: "success",
             title: "Success",
             text: res.message,
+          }).then(() => {
+            setTimeout(() => {
+              router.push("/dashboard");
+            }, 100);
           });
         }
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: err.data.message,
         });
+        if (err.data.message === "Verification code has expired.") {
+          setCanResend(true);
+        }
       });
   };
 
@@ -130,24 +128,24 @@ const VerifyOtpPage = () => {
     setTimer(60);
     setOtp(Array(6).fill(""));
     inputRefs.current[0]?.focus();
-    // getNewSignupCode(undefined)
-    //   .unwrap()
-    //   .then((res) => {
-    //     if (res.success) {
-    //       Swal.fire({
-    //         icon: "success",
-    //         title: "Success",
-    //         text: res.message,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     Swal.fire({
-    //       icon: "error",
-    //       title: "Oops...",
-    //       text: err.data.message,
-    //     });
-    //   });
+    getNewOtp()
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: res.message,
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.data.message,
+        });
+      });
   };
 
   if (isError) {
@@ -164,6 +162,19 @@ const VerifyOtpPage = () => {
     return (
       <div className="flex h-screen items-center justify-center">
         <span className="loading loading-spinner"></span>
+      </div>
+    );
+
+  if (!user)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <h3>
+          Please{" "}
+          <Link href={"/login"} className="font-bold underline">
+            Login
+          </Link>{" "}
+          first.
+        </h3>
       </div>
     );
 
@@ -214,7 +225,7 @@ const VerifyOtpPage = () => {
         </form>
 
         <button
-          className="btn btn-outline btn-primary btn-sm mt-2 ml-auto flex justify-end"
+          className={`btn btn-outline btn-primary btn-sm mt-2 ml-auto flex justify-end ${!user && "hidden"}`}
           onClick={handleResend}
           disabled={!canResend}
         >

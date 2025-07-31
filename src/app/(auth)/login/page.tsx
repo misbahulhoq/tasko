@@ -27,11 +27,14 @@ const LoginPage = () => {
       .unwrap()
       .then((data) => {
         if (data.success) {
-          router.push("/verify-otp");
           Swal.fire({
             icon: "success",
             title: "Success",
             text: data.message,
+          }).then(() => {
+            setTimeout(() => {
+              router.push("/verify-otp");
+            }, 1000);
           });
         }
       })
@@ -57,7 +60,7 @@ const LoginPage = () => {
         />
       </div>
 
-      <div className="right-column flex min-h-screen items-center justify-stretch p-6 lg:col-span-1 lg:p-16">
+      <div className="right-column flex min-h-screen items-center justify-stretch p-4 lg:col-span-1 lg:p-16">
         <div className="w-full">
           <div className="mb-6">
             <h2 className="mb-2 text-center text-4xl font-semibold">Login</h2>
@@ -83,7 +86,7 @@ const LoginPage = () => {
                 )}
               </div>
 
-              <div className="relative">
+              <div className="relative mb-3">
                 <label htmlFor="password" className="mb-2 block font-semibold">
                   Password
                 </label>
@@ -94,11 +97,6 @@ const LoginPage = () => {
                   placeholder="Enter your password"
                   {...register("password", {
                     required: "Password is required",
-                    pattern: {
-                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                      message:
-                        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-                    },
                   })}
                 />
                 {errors.password && (
@@ -123,9 +121,33 @@ const LoginPage = () => {
                   )}
                 </button>
               </div>
+
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    id="remember-me"
+                    type="checkbox"
+                    defaultChecked
+                    className="checkbox checkbox-primary"
+                  />
+                  <label
+                    htmlFor="remember-me"
+                    className="text-sm text-[#667085]"
+                  >
+                    Remember me
+                  </label>
+                </div>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-[#667085]"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
               <button
                 type="submit"
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-block mt-8"
                 disabled={isLogging}
               >
                 Login
@@ -133,19 +155,13 @@ const LoginPage = () => {
             </form>
           </div>
 
-          <div className="bottom-area-wrapper mx-auto max-w-[550px]">
-            <span className="divider">OR</span>
-            <div className="flex items-center justify-between">
-              <p className="text-center">
-                Don&apos;t have an account?{"  "} &nbsp;
-                <Link href={"/signup"} className="text-black">
-                  Sign Up
-                </Link>
-              </p>
-
-              <Link href={"/forgot-password"}>Forgot Password</Link>
-            </div>
-          </div>
+          <span className="divider">OR</span>
+          <p className="text-center">
+            Don&apos;t have an account?{"  "} &nbsp;
+            <Link href={"/signup"} className="text-black">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </section>
