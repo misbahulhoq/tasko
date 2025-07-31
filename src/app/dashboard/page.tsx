@@ -4,11 +4,12 @@ import React, { useState } from "react";
 const DashboardHome = () => {
   return (
     <section className="">
-      <div className="top-part flex items-center justify-between">
+      <div className="top-part flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-3xl font-semibold">Task List</h3>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3 lg:gap-5">
           <CategoryDropdown />
           <TaskStatusDropdown />
+          <button className="btn btn-primary">+ Add New Task</button>
         </div>
       </div>
     </section>
@@ -48,8 +49,6 @@ const CategoryDropdown = () => {
   } | null>(null);
 
   const handleSelect = (category: { name: string; slug: string }) => {
-    // If the clicked category is already selected, unselect it (set to null).
-    // Otherwise, select the new category.
     setSelectedCategory((prev) => (prev === category ? null : category));
   };
 
@@ -126,9 +125,7 @@ const TaskStatusDropdown = () => {
   } | null>(taskStatus[0]);
 
   const handleSelect = (category: { name: string; slug: string }) => {
-    // If the clicked category is already selected, unselect it (set to null).
-    // Otherwise, select the new category.
-    setSelectedCategory((prev) => (prev === category ? null : category));
+    setSelectedCategory(category);
   };
 
   return (
