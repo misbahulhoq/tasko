@@ -1,8 +1,11 @@
 "use client";
+import { useGetUserEmailQuery } from "@/redux/features/auth/getUserEmailSlice";
+import { useVerifyAccountMutation } from "@/redux/features/auth/verifyAccountSlice";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
+import Swal from "sweetalert2";
 
-const maskEmail = (email: string | null) => {
+const maskEmail = (email: string | undefined) => {
   if (email) {
     const [mail, domain] = email.split("@");
     const maskedPart = mail
@@ -24,7 +27,14 @@ const VerifyOtpPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeOfOtp = searchParams.get("type") as "signup" | "login";
-
+  const {
+    data: user,
+    isLoading,
+    error: userError,
+    isError,
+  } = useGetUserEmailQuery();
+  const [verifyAccount, { isLoading: isLoadingVerify }] =
+    useVerifyAccountMutation();
   useEffect(() => {
     (async () => {
       setEmail(localStorage.getItem("email"));
@@ -56,6 +66,18 @@ const VerifyOtpPage = () => {
       inputRefs.current[index - 1]?.focus();
     }
   };
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData("text").trim();
+    if (!/^\d+$/.test(paste)) return;
+    const pasteArray = paste.slice(0, 6).split("");
+    setOtp(pasteArray);
+
+    pasteArray.forEach((char, i) => {
+      inputRefs.current[i]?.focus();
+    });
+
+    e.preventDefault();
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,17 +88,41 @@ const VerifyOtpPage = () => {
       return;
     }
 
-    // Simulate verification
-    setTimeout(() => {
-      if (fullOtp === "123456") {
-        setMessage("✅ OTP verified successfully!");
-        setError("");
-      } else {
-        setError("❌ Invalid OTP. Please try again.");
-        setMessage("");
-      }
-    }, 1000);
+    verifyAccount({ code: fullOtp })
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        if (res.success) {
+          //do something
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          text: err.data.message,
+        });
+      });
   };
+
+  if (isError) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      text: userError.data.message,
+    });
+  }
+
+  if (isLoading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span className="loading loading-spinner"></span>
+      </div>
+    );
 
   return (
     <section className="bg-base-200 flex min-h-screen items-center justify-center px-4">
@@ -87,7 +133,7 @@ const VerifyOtpPage = () => {
         <p className="mb-6 text-center">
           We sent a 6-digit code to your email:
           <br />
-          <strong>{maskEmail(email)}</strong>
+          <strong>{maskEmail(user?.data.email)}</strong>
           <br /> Please enter it below.
         </p>
 
@@ -103,6 +149,7 @@ const VerifyOtpPage = () => {
                   inputRefs.current[index] = el;
                 }}
                 onChange={(e) => handleChange(e.target.value, index)}
+                onPaste={handlePaste}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 className="focus:ring-primary h-14 w-12 rounded-md border border-gray-300 text-center text-xl focus:ring-2 focus:outline-none"
               />
@@ -114,7 +161,11 @@ const VerifyOtpPage = () => {
             <p className="text-success text-center text-sm">{message}</p>
           )}
 
-          <button type="submit" className="btn btn-primary w-full rounded-lg">
+          <button
+            type="submit"
+            className="btn btn-primary w-full rounded-lg"
+            disabled={isLoadingVerify}
+          >
             Verify Code
           </button>
         </form>

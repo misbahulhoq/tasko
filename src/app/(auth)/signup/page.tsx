@@ -6,6 +6,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSignupMutation } from "@/redux/features/auth/signupSlice";
+import Swal from "sweetalert2";
 
 const SignUpPage = () => {
   const {
@@ -20,13 +22,23 @@ const SignUpPage = () => {
   });
   const router = useRouter();
   const password = watch("password");
+  const [signup, { isLoading }] = useSignupMutation();
 
   const onSubmit: SubmitHandler<ISignupData> = (data: ISignupData) => {
-    (async () => {
-      localStorage.setItem("email", data.email);
-    })().then(() => {
-      router.push("/verify-otp?type=signup");
-    });
+    signup(data)
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+        localStorage.setItem("email", data.email);
+        router.push("/verify-otp?type=signup");
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.data.message,
+        });
+      });
   };
   return (
     <section className="bg-base-200 grid min-h-screen lg:grid-cols-2">
@@ -171,7 +183,11 @@ const SignUpPage = () => {
               </button>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-block">
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              disabled={isLoading}
+            >
               Signup
             </button>
           </form>
