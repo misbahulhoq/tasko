@@ -32,10 +32,11 @@ const AddTaskForm: React.FC = () => {
         });
       })
       .catch((err) => {
+        console.log(err);
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: err.message,
+          text: err.data.message,
         });
       });
   };

@@ -1,12 +1,29 @@
 "use client";
 import DashboardNav from "@/components/dashboard/DashboardNav";
+import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import React, { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { ReactNode, useEffect } from "react";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathName = usePathname();
-  console.log(pathName);
+  const router = useRouter();
+  const [getUserInfo, { isLoading }] = useGetUserInfoMutation();
+  useEffect(() => {
+    getUserInfo()
+      .unwrap()
+      .then(() => {})
+      .catch((error) => {
+        router.push("/login");
+      });
+  }, [getUserInfo, router]);
+  if (isLoading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span className="loading loading-spinner"></span>
+      </div>
+    );
+
   return (
     <div className="lg:relative lg:block lg:min-h-0">
       <div className="container-center z-10 lg:relative">
