@@ -1,5 +1,7 @@
 "use client";
+import TaskCard from "@/components/dashboard/TaskCard";
 import React, { useState } from "react";
+import AddTaskForm from "./AddTaskForm";
 
 const DashboardHome = () => {
   return (
@@ -9,8 +11,12 @@ const DashboardHome = () => {
         <div className="flex flex-wrap items-center gap-3 lg:gap-5">
           <CategoryDropdown />
           <TaskStatusDropdown />
-          <button className="btn btn-primary">+ Add New Task</button>
+          <AddTaskForm />
         </div>
+      </div>
+
+      <div className="task-card-wrapper mt-10 grid md:grid-cols-2 lg:grid-cols-3">
+        <TaskCard />
       </div>
     </section>
   );
@@ -112,6 +118,10 @@ const taskStatus = [
   {
     name: "Pending",
     slug: "pending",
+  },
+  {
+    name: "Ongoing",
+    slug: "ongoing",
   },
   {
     name: "Done",
