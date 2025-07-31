@@ -6,6 +6,8 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ILogin } from "@/interfaces/login.interface";
+import { useLoginMutation } from "@/redux/features/auth/authApiSlice";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const {
@@ -18,13 +20,28 @@ const LoginPage = () => {
     confirmPassword: false,
   });
   const router = useRouter();
+  const [login, { isLoading: isLogging }] = useLoginMutation();
 
   const onSubmit: SubmitHandler<ILogin> = (data: ILogin) => {
-    (async () => {
-      localStorage.setItem("email", data.email);
-    })().then(() => {
-      router.push("/verify-otp?type=login");
-    });
+    login(data)
+      .unwrap()
+      .then((data) => {
+        if (data.success) {
+          router.push("/verify-otp");
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: data.message,
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.data.message,
+        });
+      });
   };
   return (
     <section className="bg-base-200 grid min-h-screen lg:grid-cols-2">
@@ -55,7 +72,7 @@ const LoginPage = () => {
                 <input
                   id="email"
                   type="email"
-                  className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
+                  className="input bg-base-100 focus:border-primary w-full max-w-[550px] outline-none focus:outline-none"
                   placeholder="Enter your email address"
                   {...register("email", { required: "Email is required" })}
                 />
@@ -65,6 +82,7 @@ const LoginPage = () => {
                   </span>
                 )}
               </div>
+
               <div className="relative">
                 <label htmlFor="password" className="mb-2 block font-semibold">
                   Password
@@ -72,7 +90,7 @@ const LoginPage = () => {
                 <input
                   id="password"
                   type={visibiliy.password ? "text" : "password"}
-                  className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
+                  className="input bg-base-100 focus:border-primary w-full max-w-[550px] outline-none focus:outline-none"
                   placeholder="Enter your password"
                   {...register("password", {
                     required: "Password is required",
@@ -105,11 +123,16 @@ const LoginPage = () => {
                   )}
                 </button>
               </div>
-              <button type="submit" className="btn btn-primary btn-block">
+              <button
+                type="submit"
+                className="btn btn-primary btn-block"
+                disabled={isLogging}
+              >
                 Login
               </button>
             </form>
           </div>
+
           <div className="bottom-area-wrapper mx-auto max-w-[550px]">
             <span className="divider">OR</span>
             <div className="flex items-center justify-between">
