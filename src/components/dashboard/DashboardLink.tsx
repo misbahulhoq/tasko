@@ -13,7 +13,7 @@ const DashboardLink: React.FC<DashboardLinkProps> = ({ href, label }) => {
   const isActive = pathname === href;
 
   const baseClasses =
-    "px-4 py-2 rounded-md text-sm text-white font-medium transition-colors";
+    "px-4 py-2 rounded-md text-sm  lg:text-white font-medium transition-colors";
   const activeClasses = "bg-blue-600 text-primary";
   const inactiveClasses = "";
 

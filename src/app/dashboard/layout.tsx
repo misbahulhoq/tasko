@@ -31,8 +31,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         />
       </div>
 
-      <div className="container-center bg-base-100 min-h-screen rounded-xl shadow lg:relative lg:top-12">
-        <div className="lg:p-5">{children}</div>
+      <div className="container-center bg-base-100 min-h-screen rounded-xl shadow-none lg:relative lg:top-12 lg:shadow">
+        <div className="lg:p-8">{children}</div>
       </div>
     </div>
   );

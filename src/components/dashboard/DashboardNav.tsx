@@ -15,7 +15,7 @@ const DashboardNav = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100 p-0 shadow-md lg:bg-transparent lg:text-white lg:shadow-none">
+    <div className="navbar bg-base-100 p-0 shadow-none lg:bg-transparent lg:text-white">
       {/* Part 1: Logo & Mobile Hamburger Menu */}
       <div className="navbar-start">
         <div className="dropdown">

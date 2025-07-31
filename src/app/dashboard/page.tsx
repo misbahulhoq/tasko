@@ -1,6 +1,20 @@
 "use client";
 import React, { useState } from "react";
 
+const DashboardHome = () => {
+  return (
+    <section className="">
+      <div className="top-part flex items-center justify-between">
+        <h3 className="text-3xl font-semibold">Task List</h3>
+        <div className="flex items-center gap-4">
+          <CategoryDropdown />
+          <TaskStatusDropdown />
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const categories = [
   {
     name: "Arts and Craft",
@@ -40,8 +54,12 @@ const CategoryDropdown = () => {
   };
 
   return (
-    <div className="dropdown dropdown-hover rounded-lg border border-gray-300 shadow">
-      <div tabIndex={0} role="button" className="btn btn-ghost">
+    <div className="dropdown dropdown-hover w-[160px] rounded-lg border border-gray-300 shadow">
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn btn-ghost w-full justify-between px-3"
+      >
         {selectedCategory ? selectedCategory.name : "Select Category"}
         {/* Chevron down icon */}
         <svg
@@ -87,11 +105,81 @@ const CategoryDropdown = () => {
   );
 };
 
-const DashboardHome = () => {
+const taskStatus = [
+  {
+    name: "All Task",
+    slug: "",
+  },
+  {
+    name: "Pending",
+    slug: "pending",
+  },
+  {
+    name: "Done",
+    slug: "done",
+  },
+];
+const TaskStatusDropdown = () => {
+  const [selectedCategory, setSelectedCategory] = useState<{
+    name: string;
+    slug: string;
+  } | null>(taskStatus[0]);
+
+  const handleSelect = (category: { name: string; slug: string }) => {
+    // If the clicked category is already selected, unselect it (set to null).
+    // Otherwise, select the new category.
+    setSelectedCategory((prev) => (prev === category ? null : category));
+  };
+
   return (
-    <section className="">
-      <CategoryDropdown />
-    </section>
+    <div className="dropdown dropdown-end dropdown-hover w-28 rounded-lg border border-gray-300 shadow">
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn btn-ghost w-full justify-between px-2"
+      >
+        {selectedCategory?.name}
+        {/* Chevron down icon */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="h-4 w-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+      </div>
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow-lg"
+      >
+        {taskStatus.map((category) => (
+          <li key={category.slug} onClick={() => handleSelect(category)}>
+            <a
+              className={
+                selectedCategory?.slug === category.slug
+                  ? "bg-primary text-primary-content"
+                  : ""
+              }
+            >
+              <input
+                type="checkbox"
+                readOnly
+                checked={selectedCategory?.slug === category.slug}
+                className="checkbox checkbox-primary"
+              />
+              {category.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
