@@ -1,21 +1,25 @@
-"use client";
-import Image from "next/image";
 import React from "react";
-const Header = () => {
+import { BoltIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
+const Navbar = () => {
   return (
-    <header className="">
-      <div className={`img-wrapper hidden`}>
-        <Image
-          src={"/Desktop.svg"}
-          alt="Background Image"
-          width={100}
-          height={100}
-          className="relative z-0 h-[144px] w-full object-cover"
-          priority
-        />
+    <nav className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
+      <div className="flex-1">
+        <Link href={"/"} className="flex items-center gap-1 text-xl">
+          <BoltIcon className="text-primary h-6 w-6" />
+          <span className="font-bold">Tasko</span>
+        </Link>
       </div>
-    </header>
+      <div className="flex-none">
+        <Link href="/login" className="btn btn-ghost">
+          Log In
+        </Link>
+        <Link href="/signup" className="btn btn-primary ml-2">
+          Get Started
+        </Link>
+      </div>
+    </nav>
   );
 };
 
-export default Header;
+export default Navbar;

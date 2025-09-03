@@ -4,52 +4,17 @@ import {
   CheckBadgeIcon,
   CommandLineIcon,
   UserGroupIcon,
-  BoltIcon,
 } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 const LandingPage = () => {
   return (
     <div className="bg-base-200">
-      {/* 1. Navbar */}
-      <div className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
-        <div className="flex-1">
-          <a className="btn btn-ghost text-xl">
-            <BoltIcon className="text-primary h-6 w-6" />
-            Tasko
-          </a>
-        </div>
-        <div className="flex-none">
-          <a href="/login" className="btn btn-ghost">
-            Log In
-          </a>
-          <a href="/signup" className="btn btn-primary ml-2">
-            Get Started
-          </a>
-        </div>
-      </div>
-
-      {/* 2. Hero Section */}
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">From Chaos to Clarity 🚀</h1>
-            <p className="py-6">
-              TaskMaster is your new personal assistant for organizing work and
-              life. Effortlessly create, manage, and track your tasks in one
-              simple, beautiful interface.
-            </p>
-            <a href="/signup" className="btn btn-primary">
-              Start Organizing for Free
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* 3. Features Section */}
       <div className="container mx-auto px-4 py-20">
-        <h2 className="mb-12 text-center text-4xl font-bold">
+        <h1 className="mb-12 text-center text-4xl font-bold">
           Everything You Need, Nothing You Don&apos;t
-        </h2>
+        </h1>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Feature Card 1 */}
           <div className="card bg-base-100 shadow-xl">
@@ -98,9 +63,9 @@ const LandingPage = () => {
               Join thousands of users who are taking control of their day. Sign
               up is free and takes less than a minute.
             </p>
-            <a href="/signup" className="btn btn-primary btn-wide">
+            <Link href="/signup" className="btn btn-primary btn-wide">
               Sign Up Now
-            </a>
+            </Link>
           </div>
         </div>
       </div>
