@@ -42,7 +42,7 @@ const SignUpPage = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: error.data.message,
+          text: error?.data?.message,
         });
       });
   };
@@ -72,19 +72,19 @@ const SignUpPage = () => {
             className="mx-auto mt-8 max-w-[550px] space-y-6"
           >
             <div>
-              <label htmlFor="fullName" className="mb-2 block font-semibold">
+              <label htmlFor="name" className="mb-2 block font-semibold">
                 Full Name
               </label>
               <input
-                id="fullName"
+                id="name"
                 type="text"
                 className="input bg-base-100 focus:outline-primary w-full max-w-[550px] outline-none focus:border-0"
                 placeholder="Enter your full name "
-                {...register("fullName", { required: "Full name is required" })}
+                {...register("name", { required: "Full name is required" })}
               />
-              {errors.fullName && (
+              {errors.name && (
                 <span className="text-error text-sm">
-                  {errors.fullName.message}
+                  {errors.name.message}
                 </span>
               )}
             </div>

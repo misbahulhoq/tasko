@@ -154,7 +154,7 @@ const VerifyOtpPage = () => {
       title: "Oops...",
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      text: userError.data.message,
+      text: userError?.data?.message,
     });
   }
 
