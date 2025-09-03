@@ -3,7 +3,7 @@ import { BoltIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 const Navbar = () => {
   return (
-    <nav className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
+    <nav className="bg-base-100 sticky top-0 z-50 flex min-h-16 items-center px-4 shadow-md lg:px-6">
       <div className="flex-1">
         <Link href={"/"} className="flex items-center gap-1 text-xl">
           <BoltIcon className="text-primary h-6 w-6" />
