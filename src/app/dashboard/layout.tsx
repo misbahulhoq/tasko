@@ -2,21 +2,24 @@
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import React, { ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import React, { ReactNode, useEffect, useState } from "react";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
-  const pathName = usePathname();
   const router = useRouter();
+  const [user, setUser] = useState<null | { name: string }>(null);
   const [getUserInfo, { isLoading }] = useGetUserInfoMutation();
   useEffect(() => {
     getUserInfo()
       .unwrap()
-      .then(() => {})
-      .catch((error) => {
+      .then((res) => {
+        setUser(res?.data);
+      })
+      .catch(() => {
         router.push("/login");
       });
   }, [getUserInfo, router]);
+
   if (isLoading)
     return (
       <div className="flex h-screen items-center justify-center">
@@ -31,7 +34,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       </div>
       {/* welcome message */}
       <div className={`container-center relative z-10 mt-11 hidden lg:block`}>
-        <h3 className="text-primary text-2xl font-semibold">Hi Thomas</h3>
+        <h3 className="text-primary text-2xl font-semibold">
+          Hi, {user?.name}
+        </h3>
         <h2 className="mt-2 text-4xl font-semibold text-white">
           Welcome to Dashboard
         </h2>

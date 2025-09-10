@@ -42,7 +42,10 @@ const authApiSlice = baseApi.injectEndpoints({
       }),
     }),
 
-    getUserInfo: builder.mutation<Response, void>({
+    getUserInfo: builder.mutation<
+      Response<{ name: string; email: string }>,
+      void
+    >({
       query: () => ({
         url: "/auth/me",
         method: "POST",
