@@ -2,8 +2,10 @@
 import Image from "next/image";
 import React from "react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { ITask } from "@/interfaces/task.interface";
 
-const TaskCard = () => {
+const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
+  const {} = task || {};
   return (
     <div className="min-h-[184px] max-w-[485px] rounded-xl border border-gray-200 p-5 shadow-md">
       {/* Top part */}

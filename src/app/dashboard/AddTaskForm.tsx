@@ -1,42 +1,52 @@
+import { ITask } from "@/interfaces/task.interface";
+import { IUser } from "@/interfaces/user.inter";
+import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
 import { useCreateTaskMutation } from "@/redux/features/tasks/tasksApiSlice";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 
-type TaskFormData = {
-  title: string;
-  description: string;
-  status: "pending" | "ongoing" | "done";
-  startDate: Date;
-  endDate: Date;
-};
-
 const AddTaskForm: React.FC = () => {
+  const [getUserInfo] = useGetUserInfoMutation();
+  const [user, setUser] = useState<null | IUser>(null);
+
+  console.log(user);
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<TaskFormData>();
+    reset,
+  } = useForm<ITask>({
+    defaultValues: { startDate: new Date() },
+  });
   const [addNewTask, { isLoading }] = useCreateTaskMutation();
+  useEffect(() => {
+    getUserInfo()
+      .unwrap()
+      .then((res) => {
+        setUser(res?.data);
+      })
+      .catch(() => {});
+  }, [getUserInfo]);
 
-  const onSubmit: SubmitHandler<TaskFormData> = (data) => {
-    console.log(data);
-    addNewTask(data)
+  const onSubmit: SubmitHandler<ITask> = (data) => {
+    addNewTask({ ...data, user: user?.email as string })
       .unwrap()
       .then((res) => {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: res.message,
+          text: res?.message,
         });
+        reset();
       })
       .catch((err) => {
         console.log(err);
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: err.data.message,
+          text: err?.data?.message,
         });
       });
   };
@@ -94,6 +104,21 @@ const AddTaskForm: React.FC = () => {
                   {errors.description.message}
                 </p>
               )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="priority" className="block">
+                Priority
+              </label>
+              <select
+                id="priority"
+                className="select select-primary"
+                {...register("priority")}
+              >
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+                <option value="high">High</option>
+              </select>
             </div>
 
             <div className="form-group">

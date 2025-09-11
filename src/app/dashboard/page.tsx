@@ -2,8 +2,19 @@
 import TaskCard from "@/components/dashboard/TaskCard";
 import React, { useState } from "react";
 import AddTaskForm from "./AddTaskForm";
+import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 
 const DashboardHome = () => {
+  const { data: tasks, isLoading } = useGetTasksQuery();
+  console.log(tasks?.data);
+
+  if (isLoading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span className="loading loading-spinner loading-md lg:loading-lg"></span>
+      </div>
+    );
+
   return (
     <section className="">
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
@@ -16,7 +27,9 @@ const DashboardHome = () => {
       </div>
 
       <div className="task-card-wrapper mt-10 grid md:grid-cols-2 lg:grid-cols-3">
-        <TaskCard />
+        {tasks?.data.map((task) => (
+          <TaskCard key={task.title} task={task} />
+        ))}
       </div>
     </section>
   );

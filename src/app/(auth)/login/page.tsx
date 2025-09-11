@@ -30,7 +30,7 @@ const LoginPage = () => {
           Swal.fire({
             icon: "success",
             title: "Success",
-            text: data.message,
+            text: data?.message,
           }).then(() => {
             setTimeout(() => {
               router.push("/verify-otp");
@@ -42,10 +42,11 @@ const LoginPage = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: err.data.message,
+          text: err?.data?.message,
         });
       });
   };
+
   return (
     <section className="bg-base-200 grid min-h-screen lg:grid-cols-2">
       {/* left column */}

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import DashboardLink from "./DashboardLink";
-import Image from "next/image";
+import ProfileDropdown from "./ProfileDropdown";
 
 const DashboardNav = () => {
   const navLinks = (
@@ -15,7 +15,7 @@ const DashboardNav = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100 p-0 shadow-none lg:bg-transparent lg:text-white">
+    <nav className="navbar bg-base-100 p-0 shadow-none lg:bg-transparent lg:text-white">
       {/* Part 1: Logo & Mobile Hamburger Menu */}
       <div className="navbar-start">
         <div className="dropdown">
@@ -46,7 +46,7 @@ const DashboardNav = () => {
             {navLinks}
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost text-xl">
+        <Link href="/" className="text-xl">
           🕙 Tasko
         </Link>
       </div>
@@ -57,43 +57,10 @@ const DashboardNav = () => {
       </div>
 
       {/* Part 3: User Info Dropdown */}
-      <div className="navbar-end">
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-8 overflow-hidden rounded-full">
-              <Image
-                alt="User Avatar"
-                src="/user.jpg"
-                priority
-                fill
-                className="h-8 w-8 rounded-full object-cover"
-              />
-            </div>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
+      <div className="navbar-end mt-3">
+        <ProfileDropdown />
       </div>
-    </div>
+    </nav>
   );
 };
 

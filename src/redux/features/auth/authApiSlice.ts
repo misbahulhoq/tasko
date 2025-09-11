@@ -1,5 +1,6 @@
 import { Response } from "@/interfaces/response.interface";
 import { baseApi } from "../api/baseApi";
+import { IUser } from "@/interfaces/user.inter";
 
 const authApiSlice = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -42,10 +43,7 @@ const authApiSlice = baseApi.injectEndpoints({
       }),
     }),
 
-    getUserInfo: builder.mutation<
-      Response<{ name: string; email: string }>,
-      void
-    >({
+    getUserInfo: builder.mutation<Response<IUser>, void>({
       query: () => ({
         url: "/auth/me",
         method: "POST",
