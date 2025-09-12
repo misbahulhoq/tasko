@@ -27,6 +27,13 @@ const authApiSlice = baseApi.injectEndpoints({
       }),
     }),
 
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+    }),
+
     requestNewOtp: builder.mutation<Response, void>({
       query: (data) => ({
         url: "/auth/request-new-otp",
@@ -56,6 +63,7 @@ export const {
   useGetUserEmailQuery,
   useSignupMutation,
   useLoginMutation,
+  useLogoutMutation,
   useRequestNewOtpMutation,
   useVerifyLoginCodeMutation,
   useGetUserInfoMutation,

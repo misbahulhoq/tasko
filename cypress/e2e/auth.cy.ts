@@ -26,6 +26,26 @@ describe("Auth", () => {
       cy.get("#password").type(password);
       cy.get("button[type=button]").click({ multiple: true });
       cy.get("button[type=submit]").click();
+
+      cy.wait(3000);
+      cy.visit("/verify-otp");
+      cy.request("POST", "http://localhost:5000/api/v1/auth/send-otp/test", {
+        email,
+      }).then((response) => {
+        const code: string = response.body.data.code;
+        code.split("").map((char, index) => {
+          cy.get(`#otp-${index}`).type(char);
+        });
+        cy.get("#verify-button").click();
+      });
+    });
+  });
+
+  describe("Logout", () => {
+    it("Should logout", () => {
+      cy.visit(`/dashboard`);
+      // cy.get("#user-menu-button").click();
+      // cy.get("#logout").click();
     });
   });
 });

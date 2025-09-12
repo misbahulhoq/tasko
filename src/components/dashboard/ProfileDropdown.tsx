@@ -9,11 +9,15 @@ import {
 } from "@heroicons/react/24/outline";
 import { useGetUser } from "@/hooks/user.hook";
 import { getProfileChars } from "@/utils/getProfileChars";
+import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
+import { useRouter } from "next/navigation";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useGetUser();
+  const [logout, { isLoading }] = useLogoutMutation();
+  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -45,6 +49,7 @@ export default function ProfileDropdown() {
     <div className="relative z-10" ref={dropdownRef}>
       {/* Profile Button */}
       <button
+        id="user-menu-button"
         onClick={() => setIsOpen(!isOpen)}
         className="group flex items-center space-x-3 rounded-2xl border border-white/20 bg-white/80 px-4 py-3 shadow-lg backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
       >
@@ -141,8 +146,19 @@ export default function ProfileDropdown() {
             <div className="rounded-lg bg-gray-50 p-2 transition-all duration-200 group-hover:bg-red-100">
               <ArrowLeftEndOnRectangleIcon className="h-4 w-4 text-gray-600 transition-colors duration-200 group-hover:text-red-600" />
             </div>
-            <span className="text-sm font-medium text-gray-700 transition-colors duration-200 group-hover:text-red-600">
-              Sign Out
+            <span
+              id="logout"
+              className="text-sm font-medium text-gray-700 transition-colors duration-200 group-hover:text-red-600"
+              onClick={async () =>
+                await logout()
+                  .unwrap()
+                  .then(() => {
+                    router.push("/login");
+                  })
+                  .catch(console.error)
+              }
+            >
+              Log Out
             </span>
           </button>
         </div>

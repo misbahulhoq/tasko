@@ -195,6 +195,7 @@ const VerifyOtpPage = () => {
           <div className="flex justify-center gap-2">
             {otp.map((digit, index) => (
               <input
+                id={`otp-${index}`}
                 key={index}
                 type="text"
                 maxLength={1}
@@ -216,6 +217,7 @@ const VerifyOtpPage = () => {
           )}
 
           <button
+            id="verify-button"
             type="submit"
             className="btn btn-primary w-full rounded-lg"
             disabled={isLoadingVerify}
