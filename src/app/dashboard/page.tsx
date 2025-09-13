@@ -9,7 +9,7 @@ const DashboardHome = () => {
 
   if (isLoading) {
     return (
-      <div className="mt-10 grid min-h-screen md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid min-h-screen gap-4 md:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5].map((n) => (
           <div key={n} className="mx-auto max-w-[520px]">
             <div
@@ -69,7 +69,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      <div className="task-card-wrapper mt-10 grid md:grid-cols-2 lg:grid-cols-3">
+      <div className="task-card-wrapper mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {tasks?.data.map((task) => (
           <TaskCard key={task._id} task={task} />
         ))}

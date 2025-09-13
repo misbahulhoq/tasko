@@ -151,7 +151,7 @@ const LoginPage = () => {
                 className="btn btn-primary btn-block mt-8"
                 disabled={isLogging}
               >
-                Login
+                {isLogging ? "Logging in..." : "Login"}
               </button>
             </form>
           </div>

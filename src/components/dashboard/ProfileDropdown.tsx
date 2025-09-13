@@ -11,6 +11,7 @@ import { useGetUser } from "@/hooks/user.hook";
 import { getProfileChars } from "@/utils/getProfileChars";
 import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +41,27 @@ export default function ProfileDropdown() {
     { icon: Cog6ToothIcon, label: "Settings", badge: null },
     { icon: BellAlertIcon, label: "Notifications", badge: "3" },
   ];
+
+  const handleLogOut = async () => {
+    Swal.fire({
+      title: "Are you sure to logout?",
+      text: "You will be logged out.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Logout.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout()
+          .unwrap()
+          .then(() => {
+            router.push("/login");
+          })
+          .catch(console.error);
+      }
+    });
+  };
 
   if (!user)
     return (
@@ -152,14 +174,7 @@ export default function ProfileDropdown() {
             <span
               id="logout"
               className="text-sm font-medium text-gray-700 transition-colors duration-200 group-hover:text-red-600"
-              onClick={async () =>
-                await logout()
-                  .unwrap()
-                  .then(() => {
-                    router.push("/login");
-                  })
-                  .catch(console.error)
-              }
+              onClick={handleLogOut}
             >
               Log Out
             </span>
