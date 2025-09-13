@@ -9,7 +9,7 @@ const WelcomeMessage = ({
   isLoading: boolean;
 }) => {
   if (isLoading || !user) {
-    return <div className="pt-4"></div>;
+    return <div className="pt-15"></div>;
     return (
       <div className={`container-center relative z-10 mt-9 hidden lg:block`}>
         <div className="skeleton h-8 w-48"></div>

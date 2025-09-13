@@ -43,8 +43,8 @@ export default function ProfileDropdown() {
 
   if (!user)
     return (
-      <div className="bg-base-100 flex h-[53px] w-[85px] items-center rounded-2xl">
-        <div className="skeleton ml-3 h-10 w-10 rounded-full"></div>
+      <div className="bg-base-100 flex h-[42px] w-[70px] items-center rounded-xl">
+        <div className="skeleton ml-2 h-8 w-8 rounded-full"></div>
       </div>
     );
 
@@ -54,15 +54,15 @@ export default function ProfileDropdown() {
       <button
         id="user-menu-button"
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center space-x-3 rounded-2xl border border-white/20 bg-white/80 px-2 py-1.5 shadow-lg backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
+        className="group flex items-center space-x-2 rounded-xl border border-white/20 bg-white/80 px-1.5 py-1 shadow-lg backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
       >
         <div className="relative">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-purple-600 shadow-md">
-            <span className="text-sm font-semibold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-purple-600 shadow-md">
+            <span className="text-xs font-semibold text-white">
               {getProfileChars(user?.name)}
             </span>
           </div>
-          <div className="absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full border-2 border-white bg-emerald-400"></div>
+          <div className="absolute -top-1 -right-1 h-3.5 w-3.5 animate-pulse rounded-full border-2 border-white bg-emerald-400"></div>
         </div>
 
         {/* <div className="hidden text-left sm:block">
