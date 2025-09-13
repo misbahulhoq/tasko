@@ -4,6 +4,7 @@ import { useGetUser } from "@/hooks/user.hook";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
+import WelcomeMessage from "./WelcomeMessage";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
@@ -15,13 +16,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         <DashboardNav />
       </div>
       {/* welcome message */}
-      <div className={`container-center relative z-10 mt-9 hidden lg:block`}>
-        <h3 className="text-primary text-2xl font-semibold">
-          Hi, {user?.name}
-        </h3>
-        <h2 className="mt-2 text-4xl font-semibold text-white">
-          Welcome to Dashboard
-        </h2>
+
+      <div className={`container-center relative z-10 mt-8 hidden lg:block`}>
+        <WelcomeMessage user={user} isLoading={isLoading} />
       </div>
 
       <div className={`img-wrapper z-0 hidden lg:absolute lg:inset-0 lg:block`}>

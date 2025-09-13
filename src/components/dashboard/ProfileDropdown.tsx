@@ -43,8 +43,8 @@ export default function ProfileDropdown() {
 
   if (!user)
     return (
-      <div className="flex h-screen items-center justify-center">
-        <span className="loading loading-spinner loading-md"></span>
+      <div className="bg-base-100 flex h-[53px] w-[85px] items-center rounded-2xl">
+        <div className="skeleton ml-3 h-10 w-10 rounded-full"></div>
       </div>
     );
 
@@ -65,10 +65,10 @@ export default function ProfileDropdown() {
           <div className="absolute -top-1 -right-1 h-4 w-4 animate-pulse rounded-full border-2 border-white bg-emerald-400"></div>
         </div>
 
-        <div className="hidden text-left sm:block">
+        {/* <div className="hidden text-left sm:block">
           <p className="text-sm font-medium text-gray-800">{user?.name}</p>
           <p className="text-xs text-gray-500">{user?.email}</p>
-        </div>
+        </div> */}
 
         <ChevronDownIcon
           className={`h-4 w-4 text-gray-600 transition-transform duration-300 ${

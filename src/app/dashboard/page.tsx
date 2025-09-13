@@ -6,9 +6,9 @@ import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 
 const DashboardHome = () => {
   const { data: tasks, isLoading } = useGetTasksQuery();
-  console.log(tasks?.data);
 
-  if (isLoading)
+  if (isLoading) {
+    return null;
     return (
       <div className="mt-10 grid h-screen md:grid-cols-2 lg:grid-cols-3">
         <div className="mx-auto max-w-[520px]">
@@ -62,6 +62,7 @@ const DashboardHome = () => {
         </div>
       </div>
     );
+  }
 
   return (
     <section className="">
