@@ -10,7 +10,6 @@ const AddTaskForm: React.FC = () => {
   const [getUserInfo] = useGetUserInfoMutation();
   const [user, setUser] = useState<null | IUser>(null);
 
-  console.log(user);
   const {
     register,
     handleSubmit,

@@ -194,7 +194,14 @@ const SignUpPage = () => {
               className="btn btn-primary btn-block"
               disabled={isLoading}
             >
-              Signup
+              {isLoading ? (
+                <>
+                  <span className="loading loading-spinner"></span>
+                  Registering..
+                </>
+              ) : (
+                "Signup"
+              )}
             </button>
           </form>
         </div>
