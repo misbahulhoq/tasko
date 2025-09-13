@@ -6,11 +6,7 @@ const DashboardNav = () => {
   const navLinks = (
     <>
       <li>
-        {/* <Link href="/dashboard/task-list">Task List</Link> */}
         <DashboardLink href="/dashboard/task-list" label="📝 Task List" />
-      </li>
-      <li>
-        <DashboardLink href="/dashboard/spin" label="🌀 Spin" />
       </li>
     </>
   );
@@ -57,7 +53,7 @@ const DashboardNav = () => {
       </div>
 
       {/* Part 3: User Info Dropdown */}
-      <div className="navbar-end mt-3">
+      <div className="navbar-end">
         <ProfileDropdown />
       </div>
     </nav>

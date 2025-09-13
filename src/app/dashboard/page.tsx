@@ -10,8 +10,56 @@ const DashboardHome = () => {
 
   if (isLoading)
     return (
-      <div className="flex h-screen items-center justify-center">
-        <span className="loading loading-spinner loading-md lg:loading-lg"></span>
+      <div className="mt-10 grid h-screen md:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto max-w-[520px]">
+          <div
+            className={`relative min-h-[200px] overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-lg transition-all duration-300 ease-out hover:shadow-xl`}
+          >
+            {/* Gradient background accent */}
+            <div className="bg-primary to-accent absolute top-0 right-0 left-0 h-1" />
+            {/* Top section */}
+            <div className="mb-6 flex items-start gap-4">
+              {/* Icon container with hover effect */}
+              <div className={`skeleton h-11 w-11 rounded-full`} />
+
+              {/* Content */}
+              <div className="min-w-0 flex-1">
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <h3 className="skeleton h-3 cursor-pointer text-xl leading-tight font-bold text-gray-900"></h3>
+                  <button
+                    className={`group rounded-lg p-2 transition-all duration-200 hover:scale-110 hover:bg-red-50`}
+                    aria-label="Delete task"
+                  >
+                    <div className="skeleton h-5 w-5 rounded-full" />
+                  </button>
+                </div>
+
+                <p className="skeleton text-sm leading-relaxed text-gray-600"></p>
+              </div>
+            </div>
+
+            {/* Bottom section */}
+            <div className="flex items-center justify-between gap-5 border-t border-gray-100 pt-4">
+              {/* Date section */}
+              <div className="flex items-center gap-2 text-sm">
+                <div className="rounded-lg bg-gray-100 p-1.5">
+                  <div className="skeleton h-3.5 w-3.5" />
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Dec 15 - 22</p>
+                  <p className="text-xs text-gray-500">7 days remaining</p>
+                </div>
+              </div>
+
+              {/* Status badge */}
+              <div
+                className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:scale-105`}
+              >
+                <div className="h-3.5 w-3.5" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
 

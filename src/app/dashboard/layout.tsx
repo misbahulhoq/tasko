@@ -1,39 +1,21 @@
 "use client";
 import DashboardNav from "@/components/dashboard/DashboardNav";
-import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
+import { useGetUser } from "@/hooks/user.hook";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const [user, setUser] = useState<null | { name: string }>(null);
-  const [getUserInfo, { isLoading }] = useGetUserInfoMutation();
-  useEffect(() => {
-    getUserInfo()
-      .unwrap()
-      .then((res) => {
-        setUser(res?.data);
-      })
-      .catch(() => {
-        router.push("/login");
-      });
-  }, [getUserInfo, router]);
-
-  if (isLoading)
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <span className="loading loading-spinner"></span>
-      </div>
-    );
+  const { user, isLoading } = useGetUser();
 
   return (
-    <div className="lg:relative lg:block lg:min-h-0">
-      <div className="container-center z-10 lg:relative">
+    <div className="lg:relative lg:block">
+      <div className="container-center lg:relative lg:top-0 lg:z-10">
         <DashboardNav />
       </div>
       {/* welcome message */}
-      <div className={`container-center relative z-10 mt-11 hidden lg:block`}>
+      <div className={`container-center relative z-10 mt-9 hidden lg:block`}>
         <h3 className="text-primary text-2xl font-semibold">
           Hi, {user?.name}
         </h3>
@@ -42,7 +24,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         </h2>
       </div>
 
-      <div className={`img-wrapper inset-0 z-0 hidden lg:absolute lg:block`}>
+      <div className={`img-wrapper z-0 hidden lg:absolute lg:inset-0 lg:block`}>
         <Image
           src={"/Desktop.svg"}
           alt="Background Image"
@@ -53,7 +35,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         />
       </div>
 
-      <div className="container-center bg-base-100 min-h-screen rounded-xl shadow-none lg:relative lg:top-12 lg:shadow">
+      <div className="container-center bg-base-100 min-h-screen rounded-xl shadow-none lg:relative lg:top-11 lg:shadow">
         <div className="lg:p-8">{children}</div>
       </div>
     </div>

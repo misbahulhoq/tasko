@@ -14,14 +14,17 @@ import { useRouter } from "next/navigation";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { user } = useGetUser();
   const [logout, { isLoading }] = useLogoutMutation();
   const router = useRouter();
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -51,7 +54,7 @@ export default function ProfileDropdown() {
       <button
         id="user-menu-button"
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center space-x-3 rounded-2xl border border-white/20 bg-white/80 px-4 py-3 shadow-lg backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
+        className="group flex items-center space-x-3 rounded-2xl border border-white/20 bg-white/80 px-2 py-1.5 shadow-lg backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
       >
         <div className="relative">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-purple-600 shadow-md">
