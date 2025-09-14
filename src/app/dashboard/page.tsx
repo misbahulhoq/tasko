@@ -9,7 +9,7 @@ const DashboardHome = () => {
 
   if (isLoading) {
     return (
-      <div className="mt-10 grid min-h-screen gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5].map((n) => (
           <div key={n} className="mx-auto max-w-[520px]">
             <div
@@ -63,7 +63,6 @@ const DashboardHome = () => {
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-3xl font-semibold">Task List</h3>
         <div className="flex flex-wrap items-center gap-3 lg:gap-5">
-          <CategoryDropdown />
           <TaskStatusDropdown />
           <AddTaskForm />
         </div>
@@ -71,7 +70,7 @@ const DashboardHome = () => {
 
       <div className="task-card-wrapper mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {tasks?.data.map((task) => (
-          <TaskCard key={task._id} task={task} />
+          <TaskCard key={task?._id} task={task} />
         ))}
       </div>
     </section>
@@ -104,7 +103,7 @@ const categories = [
     slug: "meditation",
   },
 ];
-const CategoryDropdown = () => {
+export const CategoryDropdown = () => {
   const [selectedCategory, setSelectedCategory] = useState<{
     name: string;
     slug: string;
