@@ -16,7 +16,19 @@ const tasksApiSlice = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Task"],
     }),
+    updateTaskStatus: builder.mutation<Response<ITask>, ITask>({
+      query: (data) => ({
+        url: `/tasks/${data._id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Task"],
+    }),
   }),
 });
 
-export const { useGetTasksQuery, useCreateTaskMutation } = tasksApiSlice;
+export const {
+  useGetTasksQuery,
+  useCreateTaskMutation,
+  useUpdateTaskStatusMutation,
+} = tasksApiSlice;

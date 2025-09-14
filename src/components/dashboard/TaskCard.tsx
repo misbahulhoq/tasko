@@ -4,11 +4,15 @@ import React, { useState } from "react";
 import { ITask } from "@/interfaces/task.interface";
 import { Trash2, Calendar, Clock, CheckCircle2, Play } from "lucide-react";
 import { TaskStatus } from "@/types/task-status.type";
+import { useUpdateTaskStatusMutation } from "@/redux/features/tasks/tasksApiSlice";
+import { stat } from "fs";
 
 const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
   const { title, description, status: taskStatus } = task || {};
   const [isHovered, setIsHovered] = useState(false);
   const [status, setStatus] = useState<TaskStatus>(taskStatus);
+  const [updateTaskStatus, { isLoading: isTaskUpdating }] =
+    useUpdateTaskStatusMutation();
 
   const getStatusConfig = (status: TaskStatus) => {
     switch (status) {
@@ -31,7 +35,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
       default:
         return {
           icon: Play,
-          text: "In Progress",
+          text: "Ongoing",
           bgColor: "bg-blue-50",
           textColor: "text-blue-700",
           borderColor: "border-blue-200",
@@ -39,8 +43,17 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
     }
   };
 
-  const statusConfig = getStatusConfig(status);
+  const statusConfig = getStatusConfig(task.status);
   const StatusIcon = statusConfig.icon;
+
+  const handleStatusUpdate = (task: ITask) => {
+    if (task.status === "done") return;
+    const statuses = ["pending", "ongoing", "done"];
+    const currentIndex = statuses.indexOf(status);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+    updateTaskStatus({ ...task, status: nextStatus as TaskStatus });
+    // setStatus(nextStatus as TaskStatus);
+  };
 
   return (
     <div className="mx-auto max-w-[520px]">
@@ -98,12 +111,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
           {/* Status badge */}
           <div
             className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:scale-105 ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor} `}
-            onClick={() => {
-              const statuses = ["pending", "ongoing", "done"];
-              const currentIndex = statuses.indexOf(status);
-              const nextStatus = statuses[(currentIndex + 1) % statuses.length];
-              setStatus(nextStatus as TaskStatus);
-            }}
+            onClick={() => handleStatusUpdate(task)}
           >
             <StatusIcon className="h-3.5 w-3.5" />
             {statusConfig.text}
