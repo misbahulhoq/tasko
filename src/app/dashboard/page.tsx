@@ -40,9 +40,9 @@ const DashboardHome = () => {
                   <div className="rounded-lg bg-gray-100 p-1.5">
                     <div className="skeleton h-3.5 w-3.5" />
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Dec 15 - 22</p>
-                    <p className="text-xs text-gray-500">7 days remaining</p>
+                  <div className="space-y-1">
+                    <div className="skeleton h-5 w-[70px]"></div>
+                    <div className="skeleton h-4 w-[50px]"></div>
                   </div>
                 </div>
 
@@ -68,7 +68,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      <div className="task-card-wrapper mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="task-card-wrapper mt-6 grid gap-4 md:grid-cols-2 lg:mt-9 lg:grid-cols-3">
         {tasks?.data.map((task) => (
           <TaskCard key={task?._id} task={task} />
         ))}

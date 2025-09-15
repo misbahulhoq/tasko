@@ -7,4 +7,6 @@ export interface ITask {
   priority: "low" | "medium" | "high";
   startDate: Date;
   endDate: Date;
+  daysRemaining: number;
+  daySummary: string;
 }
