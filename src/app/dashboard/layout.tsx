@@ -2,12 +2,10 @@
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import { useGetUser } from "@/hooks/user.hook";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
 import WelcomeMessage from "./WelcomeMessage";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
   const { user, isLoading } = useGetUser();
 
   return (
