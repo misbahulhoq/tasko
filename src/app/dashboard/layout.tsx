@@ -3,7 +3,7 @@ import DashboardNav from "@/components/dashboard/DashboardNav";
 import { useGetUser } from "@/hooks/user.hook";
 import Image from "next/image";
 import React, { ReactNode } from "react";
-import WelcomeMessage from "./WelcomeMessage";
+import WelcomeMessage from "@/components/dashboard/WelcomeMessage";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useGetUser();
