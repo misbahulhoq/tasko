@@ -4,14 +4,20 @@ import React, { useState } from "react";
 import { ITask } from "@/interfaces/task.interface";
 import { Trash2, Calendar, Clock, CheckCircle2, Play } from "lucide-react";
 import { TaskStatus } from "@/types/task-status.type";
-import { useUpdateTaskStatusMutation } from "@/redux/features/tasks/tasksApiSlice";
+import {
+  useDeleteTaskMutation,
+  useUpdateTaskStatusMutation,
+} from "@/redux/features/tasks/tasksApiSlice";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
-  const { title, description, daysRemaining, daySummary, status } = task || {};
+  const { _id, title, description, daysRemaining, daySummary, status } =
+    task || {};
   const [isHovered, setIsHovered] = useState(false);
   const [updateTaskStatus, { isLoading: isTaskUpdating }] =
     useUpdateTaskStatusMutation();
+  const [deleteTask] = useDeleteTaskMutation();
 
   const getStatusConfig = (status: TaskStatus) => {
     switch (status) {
@@ -51,7 +57,26 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
     const currentIndex = statuses.indexOf(task.status);
     const nextStatus = statuses[(currentIndex + 1) % statuses.length];
     updateTaskStatus({ ...task, status: nextStatus as TaskStatus });
-    // setStatus(nextStatus as TaskStatus);
+  };
+
+  const handleDelete = (taskId: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTask({ id: taskId })
+          .unwrap()
+          .then(() => {
+            Swal.fire("Deleted!", "Your task has been deleted.", "success");
+          });
+      }
+    });
   };
 
   return (
@@ -86,6 +111,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
               <button
                 className={`group rounded-lg p-2 transition-all duration-200 hover:scale-110 hover:bg-red-50 ${isHovered ? "opacity-100" : "opacity-70"} `}
                 aria-label="Delete task"
+                onClick={() => handleDelete(_id)}
               >
                 <Trash2 className="h-5 w-5 text-gray-400 transition-colors group-hover:text-red-500" />
               </button>

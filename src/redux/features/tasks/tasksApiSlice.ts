@@ -20,6 +20,15 @@ const tasksApiSlice = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Task"],
     }),
+    deleteTask: builder.mutation<Response<ITask>, { id: string }>({
+      query: ({ id }) => {
+        return {
+          url: `/tasks/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Task"],
+    }),
     updateTaskStatus: builder.mutation<Response<ITask>, ITask>({
       query: (data) => ({
         url: `/tasks/${data._id}`,
@@ -35,5 +44,6 @@ export const {
   useGetTasksQuery,
   useGetTaskByIdQuery,
   useCreateTaskMutation,
+  useDeleteTaskMutation,
   useUpdateTaskStatusMutation,
 } = tasksApiSlice;
