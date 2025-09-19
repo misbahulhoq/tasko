@@ -6,7 +6,7 @@ const DashboardNav = () => {
   const navLinks = (
     <>
       <li>
-        <DashboardLink href="/dashboard/task-list" label="📝 Task List" />
+        <DashboardLink href="/dashboard" label="📝 Task List" />
       </li>
     </>
   );

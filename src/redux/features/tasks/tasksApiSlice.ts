@@ -8,6 +8,10 @@ const tasksApiSlice = baseApi.injectEndpoints({
       query: () => "/tasks",
       providesTags: ["Task"],
     }),
+    getTaskById: builder.query<Response<ITask>, { id: string }>({
+      query: ({ id }) => `/tasks/${id}`,
+      providesTags: ["Task"],
+    }),
     createTask: builder.mutation<Response<ITask>, ITask>({
       query: (data) => ({
         url: "/tasks",
@@ -29,6 +33,7 @@ const tasksApiSlice = baseApi.injectEndpoints({
 
 export const {
   useGetTasksQuery,
+  useGetTaskByIdQuery,
   useCreateTaskMutation,
   useUpdateTaskStatusMutation,
 } = tasksApiSlice;

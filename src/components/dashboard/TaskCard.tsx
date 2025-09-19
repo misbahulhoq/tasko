@@ -5,6 +5,7 @@ import { ITask } from "@/interfaces/task.interface";
 import { Trash2, Calendar, Clock, CheckCircle2, Play } from "lucide-react";
 import { TaskStatus } from "@/types/task-status.type";
 import { useUpdateTaskStatusMutation } from "@/redux/features/tasks/tasksApiSlice";
+import Link from "next/link";
 
 const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
   const { title, description, daysRemaining, daySummary, status } = task || {};
@@ -54,7 +55,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
   };
 
   return (
-    <div className="mx-auto max-w-[520px]">
+    <div className="max-w-[520px]">
       <div
         className={`relative min-h-[200px] rounded-2xl border border-gray-200 bg-white px-5 pt-5 pb-3 shadow-lg transition-all duration-300 ease-out hover:shadow-xl ${isHovered ? "scale-[1.02] border-gray-300" : ""} overflow-hidden`}
         onMouseEnter={() => setIsHovered(true)}
@@ -76,9 +77,12 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
           {/* Content */}
           <div className="min-w-0 flex-1">
             <div className="mb-2 flex items-start justify-between gap-3">
-              <h3 className="cursor-pointer text-xl leading-tight font-bold text-gray-900">
+              <Link
+                href={`/dashboard/tasks/${task._id}`}
+                className="cursor-pointer text-xl leading-tight font-bold text-gray-900"
+              >
                 {title}
-              </h3>
+              </Link>
               <button
                 className={`group rounded-lg p-2 transition-all duration-200 hover:scale-110 hover:bg-red-50 ${isHovered ? "opacity-100" : "opacity-70"} `}
                 aria-label="Delete task"
@@ -87,7 +91,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
               </button>
             </div>
 
-            <p className="text-sm leading-relaxed text-gray-600">
+            <p className="line-clamp-2 text-sm leading-relaxed text-gray-600">
               {description}
             </p>
           </div>

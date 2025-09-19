@@ -68,7 +68,7 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      <div className="task-card-wrapper mt-6 grid gap-4 md:grid-cols-2 lg:mt-9 lg:grid-cols-3">
+      <div className="task-card-wrapper mt-6 grid gap-4 sm:grid-cols-2 lg:mt-9 lg:grid-cols-3">
         {tasks?.data.map((task) => (
           <TaskCard key={task?._id} task={task} />
         ))}
