@@ -64,6 +64,15 @@ const DashboardHome = () => {
     );
   }
 
+  if (tasks?.data.length === 0) {
+    return (
+      <div className="mt-10">
+        <h3 className="mb-5 text-3xl font-semibold">No Task Found</h3>
+        <AddTaskForm />
+      </div>
+    );
+  }
+
   return (
     <section className="">
       <div className="top-part flex flex-wrap items-center justify-between gap-3">

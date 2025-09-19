@@ -48,8 +48,48 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
     }
   };
 
+  const getPriorityConfig = (priority: "low" | "medium" | "high") => {
+    switch (priority?.toLowerCase()) {
+      case "high":
+      case "urgent":
+        return {
+          text: "High",
+          bgColor: "bg-red-50",
+          textColor: "text-red-700",
+          borderColor: "border-red-200",
+          dotColor: "bg-red-500",
+        };
+      case "medium":
+      case "normal":
+        return {
+          text: "Medium",
+          bgColor: "bg-yellow-50",
+          textColor: "text-yellow-700",
+          borderColor: "border-yellow-200",
+          dotColor: "bg-yellow-500",
+        };
+      case "low":
+        return {
+          text: "Low",
+          bgColor: "bg-green-50",
+          textColor: "text-green-700",
+          borderColor: "border-green-200",
+          dotColor: "bg-green-500",
+        };
+      default:
+        return {
+          text: "Normal",
+          bgColor: "bg-gray-50",
+          textColor: "text-gray-700",
+          borderColor: "border-gray-200",
+          dotColor: "bg-gray-500",
+        };
+    }
+  };
+
   const statusConfig = getStatusConfig(task.status);
   const StatusIcon = statusConfig.icon;
+  const priorityConfig = getPriorityConfig(task.priority);
 
   const handleStatusUpdate = (task: ITask) => {
     if (task.status === "done") return;
@@ -88,6 +128,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
       >
         {/* Gradient background accent */}
         <div className="bg-primary to-accent absolute top-0 right-0 left-0 h-1" />
+
         {/* Top section */}
         <div className="mb-6 flex items-start gap-4">
           {/* Icon container with hover effect */}
@@ -104,7 +145,7 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
             <div className="mb-2 flex items-start justify-between gap-3">
               <Link
                 href={`/dashboard/tasks/${task._id}`}
-                className="cursor-pointer text-xl leading-tight font-bold text-gray-900"
+                className="line-clamp-2 cursor-pointer pr-20 text-xl leading-tight font-bold text-gray-900" // Added right padding to avoid overlap with priority badge
               >
                 {title}
               </Link>
@@ -120,6 +161,18 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
             <p className="line-clamp-2 text-sm leading-relaxed text-gray-600">
               {description}
             </p>
+          </div>
+        </div>
+
+        {/* Priority indicator - top right corner */}
+        <div className="absolute top-2 -left-2 -rotate-32">
+          <div
+            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${priorityConfig.bgColor} ${priorityConfig.textColor} ${priorityConfig.borderColor}`}
+          >
+            <div
+              className={`h-2 w-2 rounded-full ${priorityConfig.dotColor}`}
+            />
+            {priorityConfig.text}
           </div>
         </div>
 
