@@ -2,6 +2,11 @@
 
 The front-end part of a task management application built with Next.js, TypeScript, and Tailwind CSS. It allows users to sign up, log in, and manage their tasks. The application uses Redux Toolkit for state management and RTK Query for data fetching. End-to-end testing is done with Cypress, and unit testing with Jest and React Testing Library.
 
+⚠️ **Note:** This is only the **front-end** part of the project.  
+The **back-end server must be set up and running first** in order for the front-end to work properly. You can find the backend repository and setup instructions [here](https://github.com/misbahulhoq/api-tasko).
+
+---
+
 ## Features
 
 - User authentication (signup, login, logout)
@@ -25,6 +30,7 @@ The front-end part of a task management application built with Next.js, TypeScri
 
 - Node.js (v18 or higher)
 - pnpm
+- Backend server running (see [backend setup](https://github.com/misbahulhoq/api-tasko))
 
 ### Installation
 
