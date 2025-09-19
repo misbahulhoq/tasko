@@ -15,9 +15,9 @@ const DashboardHome = () => {
 
   if (isLoading) {
     return (
-      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5].map((n) => (
-          <div key={n} className="mx-auto max-w-[520px]">
+          <div key={n} className="max-w-[520px]">
             <div
               className={`relative h-[200px] overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-lg transition-all duration-300 ease-out hover:shadow-xl`}
             >
