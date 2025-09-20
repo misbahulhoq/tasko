@@ -1,10 +1,18 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { BoltIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useGetUser } from "@/hooks/user.hook";
+import { askForNotifications } from "@/utils/askForNotification";
 const Navbar = () => {
   const pathName = usePathname();
+  const { user, isLoading } = useGetUser();
+  useEffect(() => {
+    askForNotifications();
+
+    return () => askForNotifications();
+  });
   if (pathName.includes("/dashboard")) return null;
   return (
     <nav className="bg-base-100 sticky top-0 z-50 flex min-h-16 items-center px-4 shadow-md lg:px-6">
@@ -14,13 +22,21 @@ const Navbar = () => {
           <span className="font-bold">Tasko</span>
         </Link>
       </div>
-      <div className="flex-none">
-        <Link href="/login" className="btn btn-ghost">
-          Log In
-        </Link>
-        <Link href="/signup" className="btn btn-primary ml-2">
-          Get Started
-        </Link>
+      <div className={`flex-none ${isLoading && "hidden"}`}>
+        {user ? (
+          <Link href={"/dashboard"} className="btn btn-primary">
+            Dashboard
+          </Link>
+        ) : (
+          <>
+            <Link href="/login" className="btn btn-ghost">
+              Log In
+            </Link>
+            <Link href="/signup" className="btn btn-primary ml-2">
+              Get Started
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
