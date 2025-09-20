@@ -27,8 +27,12 @@ describe("Auth", () => {
       cy.get("button[type=button]").click({ multiple: true });
       cy.get("button[type=submit]").click();
 
-      cy.wait(3000);
-      cy.visit("/verify-otp");
+      cy.request("POST", "http://localhost:5000/api/v1/auth/login", {
+        ...user,
+      }).then(() => {
+        cy.visit("/verify-otp");
+      });
+
       cy.request("POST", "http://localhost:5000/api/v1/auth/send-otp/test", {
         email,
       }).then((response) => {

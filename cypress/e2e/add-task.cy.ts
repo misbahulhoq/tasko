@@ -24,7 +24,7 @@ function generateRandomDataForTask() {
 
 describe("Add New Task", () => {
   it("should add a new task successfully", () => {
-    // Visit the dashboard page (adjust URL if needed)
+    // Visit the dashboard page
     cy.visit("/dashboard");
 
     // Open the add task modal
