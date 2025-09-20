@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITask } from "@/interfaces/task.interface";
 import { Trash2, Calendar, Clock, CheckCircle2, Play } from "lucide-react";
 import { TaskStatus } from "@/types/task-status.type";
@@ -18,6 +18,32 @@ const TaskCard: React.FC<{ task: ITask }> = ({ task }) => {
   const [updateTaskStatus, { isLoading: isTaskUpdating }] =
     useUpdateTaskStatusMutation();
   const [deleteTask] = useDeleteTaskMutation();
+
+  useEffect(() => {
+    const showUrgentTaskNotification = () => {
+      if (daysRemaining < 3) {
+        // const notification = new Notification("Less than 3 days remaining", {
+        //   silent: false,
+        // });
+      }
+    };
+    function test() {
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => {
+            console.log("Service Worker Registered");
+          })
+          .catch((err) => console.log("Error", err));
+      } else {
+        console.log("Navigator not supported.");
+      }
+    }
+    test();
+
+    // showUrgentTaskNotification();
+    return () => showUrgentTaskNotification();
+  });
 
   const getStatusConfig = (status: TaskStatus) => {
     switch (status) {
