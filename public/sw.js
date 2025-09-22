@@ -1,5 +1,9 @@
-self.addEventListener("install", (e) => {});
-
-self.addEventListener("activate", () => {});
-
-self.addEventListener("fetch", (e) => {});
+self.addEventListener("push", (event) => {
+  const data = event.data.json();
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.message,
+      icon: "/icon.png",
+    }),
+  );
+});

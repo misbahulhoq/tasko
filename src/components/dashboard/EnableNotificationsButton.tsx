@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BellAlertIcon } from "@heroicons/react/24/outline";
 import { askForNotifications } from "@/utils/askForNotification";
+import { subscribeUser } from "@/utils/subscribeUser";
 
 interface Props {
   closeModal: () => void;
@@ -20,6 +21,7 @@ const EnableNotificationsButton = ({ closeModal }: Props) => {
 
   const handleClick = () => {
     askForNotifications();
+    subscribeUser();
     closeModal();
   };
   return (

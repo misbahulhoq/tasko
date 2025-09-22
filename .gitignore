@@ -48,3 +48,5 @@ next-env.d.ts
 
 # Cypress downloads
 cypress/downloads/
+
+test.ts

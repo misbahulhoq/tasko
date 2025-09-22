@@ -8,10 +8,10 @@ export async function subscribeUser() {
   const registration = await navigator.serviceWorker.register("./sw.js");
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: "",
+    applicationServerKey: process.env.NEXT_PUBLIC_VAPID_KEY,
   });
 
-  await fetch(`${baseUrl}/subscribe`, {
+  await fetch(`${baseUrl}/notifications/subscribe`, {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: { "Content-type": "application/json" },
