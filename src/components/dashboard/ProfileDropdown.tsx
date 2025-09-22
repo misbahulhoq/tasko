@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   UserIcon,
   Cog6ToothIcon,
-  BellAlertIcon,
   ChevronDownIcon,
   ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
@@ -12,11 +11,10 @@ import { getProfileChars } from "@/utils/getProfileChars";
 import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { askForNotifications } from "@/utils/askForNotification";
+import EnableNotificationsButton from "./EnableNotificationsButton";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { user } = useGetUser();
   const [logout] = useLogoutMutation();
@@ -32,14 +30,6 @@ export default function ProfileDropdown() {
       }
     }
 
-    if (window.Notification) {
-      if (Notification.permission === "granted") {
-        setNotificationsEnabled(true);
-      } else {
-        setNotificationsEnabled(false);
-      }
-    }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -49,7 +39,6 @@ export default function ProfileDropdown() {
   const menuItems = [
     { icon: UserIcon, label: "Profile", badge: null },
     { icon: Cog6ToothIcon, label: "Settings", badge: null },
-    { icon: BellAlertIcon, label: "Enable notifications", badge: null },
   ];
 
   const handleLogOut = async () => {
@@ -71,13 +60,6 @@ export default function ProfileDropdown() {
           .catch(console.error);
       }
     });
-  };
-
-  const handleMenuItemClick = (label: string) => {
-    if (label === "Enable notifications") {
-      askForNotifications();
-    }
-    setIsOpen(false);
   };
 
   if (!user)
@@ -150,8 +132,8 @@ export default function ProfileDropdown() {
           {menuItems.map((item, index) => (
             <button
               key={index}
-              className={`group flex w-full items-center justify-between rounded-xl px-3 py-3 transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 ${item.label === "Enable notifications" && notificationsEnabled ? "hidden" : "block"}`}
-              onClick={() => handleMenuItemClick(item.label)}
+              className={`group flex w-full items-center justify-between rounded-xl px-3 py-3 transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50`}
+              onClick={() => setIsOpen(false)}
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg bg-gray-50 p-2 transition-all duration-200 group-hover:bg-white group-hover:shadow-md">
@@ -161,21 +143,14 @@ export default function ProfileDropdown() {
                   {item.label}
                 </span>
               </div>
-              {item.badge && (
-                <span
-                  className={`rounded-full px-2 py-1 text-xs font-medium ${
-                    item.badge === "Pro"
-                      ? "bg-gradient-to-r from-violet-500 to-purple-600 text-white"
-                      : item.badge === "3"
-                        ? "bg-red-100 text-red-600"
-                        : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {item.badge}
-                </span>
-              )}
             </button>
           ))}
+
+          <EnableNotificationsButton
+            closeModal={() => {
+              setIsOpen(false);
+            }}
+          />
         </div>
 
         {/* Divider */}

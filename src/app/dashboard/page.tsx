@@ -1,11 +1,21 @@
 "use client";
 import TaskCard from "@/components/dashboard/TaskCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 import AddTaskForm from "@/components/dashboard/AddTaskForm";
 
 const DashboardHome = () => {
   const { data: tasks, isLoading } = useGetTasksQuery();
+
+  useEffect(() => {
+    async function subscribeUser() {}
+
+    subscribeUser();
+
+    return () => {
+      subscribeUser();
+    };
+  }, []);
 
   if (isLoading) {
     return (
