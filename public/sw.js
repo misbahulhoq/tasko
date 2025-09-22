@@ -3,7 +3,7 @@ self.addEventListener("push", (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.message,
-      icon: "/icon.png",
+      icon: "/favicon.png",
     }),
   );
 });

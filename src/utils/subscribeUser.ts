@@ -1,6 +1,6 @@
 import { baseUrl } from "@/redux/features/api/baseApi";
 
-export async function subscribeUser() {
+export async function subscribeUser(email: string) {
   if (!("serviceWorker" in navigator)) {
     alert("Service Workers are not supported in this browser.");
     return;
@@ -13,7 +13,7 @@ export async function subscribeUser() {
 
   await fetch(`${baseUrl}/notifications/subscribe`, {
     method: "POST",
-    body: JSON.stringify(subscription),
+    body: JSON.stringify({ ...subscription.toJSON(), email }),
     headers: { "Content-type": "application/json" },
   });
 }
