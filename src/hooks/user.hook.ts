@@ -1,18 +1,24 @@
-import { IUser } from "@/interfaces/user.inter";
 import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useAppDispatch } from "./redux.hook";
+import { setUser } from "@/redux/store/userSlice";
 
-export const useGetUser = () => {
-  const [user, setUser] = useState<IUser | null>(null);
-  const [getUserInfo, { isLoading }] = useGetUserInfoMutation();
+export const useFetchUser = () => {
+  const dispatch = useAppDispatch();
+  const [getUserInfo] = useGetUserInfoMutation();
   useEffect(() => {
-    getUserInfo()
-      .unwrap()
-      .then((res) => {
-        setUser(res?.data);
-      })
-      .catch((err) => console.log(err));
-  }, [getUserInfo]);
+    function fetchUser() {
+      getUserInfo()
+        .unwrap()
+        .then((res) => {
+          dispatch(setUser(res?.data));
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(setUser(null));
+        });
+    }
 
-  return { user, isLoading };
+    fetchUser();
+  }, [dispatch, getUserInfo]);
 };

@@ -1,19 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import CTA from "@/components/home/CTA";
+import { useFetchUser } from "@/hooks/user.hook";
 
 const LandingPage = () => {
-  useEffect(() => {
-    function displayOfflinePage() {
-      if (navigator.serviceWorker) {
-        navigator.serviceWorker.register("sw_offline_page.js");
-      }
-    }
-    displayOfflinePage();
-    return () => displayOfflinePage();
-  });
+  useFetchUser();
   return (
     <div className="bg-base-200">
       {/* 1. Hero Section */}

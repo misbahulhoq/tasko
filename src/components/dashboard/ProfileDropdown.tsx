@@ -6,17 +6,17 @@ import {
   ChevronDownIcon,
   ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { useGetUser } from "@/hooks/user.hook";
 import { getProfileChars } from "@/utils/getProfileChars";
 import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import EnableNotificationsButton from "./EnableNotificationsButton";
+import { useAppSelector } from "@/hooks/redux.hook";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { user } = useGetUser();
+  const { user } = useAppSelector((state) => state.user);
   const [logout] = useLogoutMutation();
   const router = useRouter();
 

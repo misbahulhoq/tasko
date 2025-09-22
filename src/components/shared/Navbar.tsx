@@ -3,11 +3,11 @@ import React from "react";
 import { BoltIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useGetUser } from "@/hooks/user.hook";
+import { useAppSelector } from "@/hooks/redux.hook";
 
 const Navbar = () => {
   const pathName = usePathname();
-  const { user, isLoading } = useGetUser();
+  const { user, isLoading } = useAppSelector((state) => state.user);
 
   if (pathName.includes("/dashboard")) return null;
   return (

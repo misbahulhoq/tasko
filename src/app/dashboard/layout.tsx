@@ -1,12 +1,12 @@
 "use client";
 import DashboardNav from "@/components/dashboard/DashboardNav";
-import { useGetUser } from "@/hooks/user.hook";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 import WelcomeMessage from "@/components/dashboard/WelcomeMessage";
+import { useAppSelector } from "@/hooks/redux.hook";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
-  const { user, isLoading } = useGetUser();
+  const { user, isLoading } = useAppSelector((state) => state.user);
 
   return (
     <div className="lg:relative lg:block">
