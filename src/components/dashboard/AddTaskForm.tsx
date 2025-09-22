@@ -1,15 +1,12 @@
+import { useAppSelector } from "@/hooks/redux.hook";
 import { ITask } from "@/interfaces/task.interface";
-import { IUser } from "@/interfaces/user.inter";
-import { useGetUserInfoMutation } from "@/redux/features/auth/authApiSlice";
 import { useCreateTaskMutation } from "@/redux/features/tasks/tasksApiSlice";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 
 const AddTaskForm: React.FC = () => {
-  const [getUserInfo] = useGetUserInfoMutation();
-  const [user, setUser] = useState<null | IUser>(null);
-
+  const { user } = useAppSelector((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -20,14 +17,6 @@ const AddTaskForm: React.FC = () => {
     defaultValues: { startDate: new Date() },
   });
   const [addNewTask, { isLoading }] = useCreateTaskMutation();
-  useEffect(() => {
-    getUserInfo()
-      .unwrap()
-      .then((res) => {
-        setUser(res?.data);
-      })
-      .catch(() => {});
-  }, [getUserInfo]);
 
   const onSubmit: SubmitHandler<ITask> = (data) => {
     addNewTask({ ...data, user: user?.email as string })

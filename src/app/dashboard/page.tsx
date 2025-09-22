@@ -9,9 +9,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     async function subscribeUser() {}
-
     subscribeUser();
-
     return () => {
       subscribeUser();
     };

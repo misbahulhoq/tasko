@@ -3,10 +3,7 @@ import React from "react";
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import CTA from "@/components/home/CTA";
-import { useFetchUser } from "@/hooks/user.hook";
-
 const LandingPage = () => {
-  useFetchUser();
   return (
     <div className="bg-base-200">
       {/* 1. Hero Section */}
