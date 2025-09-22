@@ -12,9 +12,11 @@ import { getProfileChars } from "@/utils/getProfileChars";
 import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { askForNotifications } from "@/utils/askForNotification";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { user } = useGetUser();
   const [logout] = useLogoutMutation();
@@ -30,6 +32,14 @@ export default function ProfileDropdown() {
       }
     }
 
+    if (window.Notification) {
+      if (Notification.permission === "granted") {
+        setNotificationsEnabled(true);
+      } else {
+        setNotificationsEnabled(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -39,7 +49,7 @@ export default function ProfileDropdown() {
   const menuItems = [
     { icon: UserIcon, label: "Profile", badge: null },
     { icon: Cog6ToothIcon, label: "Settings", badge: null },
-    { icon: BellAlertIcon, label: "Notifications", badge: "3" },
+    { icon: BellAlertIcon, label: "Enable notifications", badge: null },
   ];
 
   const handleLogOut = async () => {
@@ -61,6 +71,13 @@ export default function ProfileDropdown() {
           .catch(console.error);
       }
     });
+  };
+
+  const handleMenuItemClick = (label: string) => {
+    if (label === "Enable notifications") {
+      askForNotifications();
+    }
+    setIsOpen(false);
   };
 
   if (!user)
@@ -111,7 +128,9 @@ export default function ProfileDropdown() {
         <div className="border-b border-gray-100 p-4">
           <div className="flex items-center space-x-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 shadow-lg">
-              <span className="font-bold text-white">JD</span>
+              <span className="font-bold text-white">
+                {getProfileChars(user?.name)}
+              </span>
             </div>
             <div>
               <h3 className="font-semibold text-gray-800">{user?.name}</h3>
@@ -131,8 +150,8 @@ export default function ProfileDropdown() {
           {menuItems.map((item, index) => (
             <button
               key={index}
-              className="group flex w-full items-center justify-between rounded-xl px-3 py-3 transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50"
-              onClick={() => setIsOpen(false)}
+              className={`group flex w-full items-center justify-between rounded-xl px-3 py-3 transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 ${item.label === "Enable notifications" && notificationsEnabled ? "hidden" : "block"}`}
+              onClick={() => handleMenuItemClick(item.label)}
             >
               <div className="flex items-center space-x-3">
                 <div className="rounded-lg bg-gray-50 p-2 transition-all duration-200 group-hover:bg-white group-hover:shadow-md">

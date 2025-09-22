@@ -1,17 +1,11 @@
 "use client";
 import TaskCard from "@/components/dashboard/TaskCard";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
-import { askForNotifications } from "@/utils/askForNotification";
 import AddTaskForm from "@/components/dashboard/AddTaskForm";
 
 const DashboardHome = () => {
   const { data: tasks, isLoading } = useGetTasksQuery();
-
-  useEffect(() => {
-    askForNotifications();
-    return () => askForNotifications();
-  }, []);
 
   if (isLoading) {
     return (

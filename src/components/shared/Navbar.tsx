@@ -1,18 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { BoltIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useGetUser } from "@/hooks/user.hook";
-import { askForNotifications } from "@/utils/askForNotification";
+
 const Navbar = () => {
   const pathName = usePathname();
   const { user, isLoading } = useGetUser();
-  useEffect(() => {
-    askForNotifications();
 
-    return () => askForNotifications();
-  });
   if (pathName.includes("/dashboard")) return null;
   return (
     <nav className="bg-base-100 sticky top-0 z-50 flex min-h-16 items-center px-4 shadow-md lg:px-6">
