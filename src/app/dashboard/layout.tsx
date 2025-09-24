@@ -4,9 +4,18 @@ import Image from "next/image";
 import React, { ReactNode } from "react";
 import WelcomeMessage from "@/components/dashboard/WelcomeMessage";
 import { useAppSelector } from "@/hooks/redux.hook";
+import { useRouter } from "next/navigation";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useAppSelector((state) => state.user);
+  const router = useRouter();
+  if (isLoading) return null;
+
+  if (!user) {
+    setTimeout(() => {
+      router.push("/login");
+    }, 500);
+  }
 
   return (
     <div className="lg:relative lg:block">
