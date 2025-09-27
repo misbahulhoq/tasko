@@ -48,6 +48,8 @@ const DashboardHome = () => {
   const updateSearchQuery = (searchQuery?: string) => {
     if (searchQuery) {
       setTaskFilter({ ...taskFilter, query: searchQuery });
+    } else {
+      setTaskFilter({ ...taskFilter, query: null });
     }
   };
 
@@ -101,15 +103,6 @@ const DashboardHome = () => {
             </div>
           </div>
         ))}
-      </div>
-    );
-  }
-
-  if (tasks?.length === 0) {
-    return (
-      <div className="mt-10">
-        <h3 className="mb-5 text-3xl font-semibold">No Task Found</h3>
-        <AddTaskForm />
       </div>
     );
   }

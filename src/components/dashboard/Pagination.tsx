@@ -11,7 +11,7 @@ const Pagination = ({ props }: { props: PaginationProps }) => {
   const { page: queryPage, limit, updatePagination } = useContext(TaskContext);
 
   return (
-    <section className="flex items-center justify-between">
+    <section className="flex flex-wrap items-center justify-between gap-3 lg:gap-5">
       <div className="join">
         {pages.map((page, index) => {
           return (
