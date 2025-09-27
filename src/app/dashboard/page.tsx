@@ -1,26 +1,12 @@
 "use client";
 import TaskCard from "@/components/dashboard/TaskCard";
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
 import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 import AddTaskForm from "@/components/dashboard/AddTaskForm";
 import SearchInput from "@/components/dashboard/SearchInput";
 import Pagination from "@/components/dashboard/Pagination";
 import { prepareQuery } from "@/utils/prepareQuery";
-
-type TaskContextType = {
-  page: number;
-  limit: number;
-  query: string | null;
-  updatePagination: (pagination: { page?: number; limit?: number }) => void;
-  updateSearchQuery: (searchQuery?: string) => void;
-};
-export const TaskContext = createContext<TaskContextType>({
-  page: 1,
-  limit: 10,
-  query: null,
-  updatePagination: () => {},
-  updateSearchQuery: () => {},
-});
+import { TaskFilterContext } from "@/context/TaskFilterContext";
 
 const DashboardHome = () => {
   const [taskFilter, setTaskFilter] = useState<{
@@ -108,7 +94,7 @@ const DashboardHome = () => {
   }
 
   return (
-    <TaskContext.Provider
+    <TaskFilterContext.Provider
       value={{ ...taskFilter, updatePagination, updateSearchQuery }}
     >
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
@@ -129,7 +115,7 @@ const DashboardHome = () => {
       <div className="mt-10 pb-8">
         <Pagination props={{ totalPages: totalPages as number }} />
       </div>
-    </TaskContext.Provider>
+    </TaskFilterContext.Provider>
   );
 };
 

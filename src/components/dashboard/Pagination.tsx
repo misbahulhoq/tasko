@@ -1,5 +1,6 @@
 "use client";
-import { TaskContext } from "@/app/dashboard/page";
+
+import { TaskFilterContext } from "@/context/TaskFilterContext";
 import React, { useContext } from "react";
 
 interface PaginationProps {
@@ -8,7 +9,11 @@ interface PaginationProps {
 const Pagination = ({ props }: { props: PaginationProps }) => {
   const { totalPages } = props;
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const { page: queryPage, limit, updatePagination } = useContext(TaskContext);
+  const {
+    page: queryPage,
+    limit,
+    updatePagination,
+  } = useContext(TaskFilterContext);
 
   return (
     <section className="flex flex-wrap items-center justify-between gap-3 lg:gap-5">

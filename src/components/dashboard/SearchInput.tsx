@@ -1,9 +1,10 @@
 "use client";
-import { TaskContext } from "@/app/dashboard/page";
+
 import React, { useContext } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { TaskFilterContext } from "@/context/TaskFilterContext";
 const SearchInput = () => {
-  const { updateSearchQuery, query } = useContext(TaskContext);
+  const { updateSearchQuery, query } = useContext(TaskFilterContext);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     console.log(value);
