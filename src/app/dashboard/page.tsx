@@ -1,19 +1,58 @@
 "use client";
 import TaskCard from "@/components/dashboard/TaskCard";
-import React, { useEffect, useState } from "react";
+import React, { useState, createContext } from "react";
 import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 import AddTaskForm from "@/components/dashboard/AddTaskForm";
+import SearchInput from "@/components/dashboard/SearchInput";
+import Pagination from "@/components/dashboard/Pagination";
+import { prepareQuery } from "@/utils/prepareQuery";
+
+type TaskContextType = {
+  page: number;
+  limit: number;
+  query: string | null;
+  updatePagination: (pagination: { page?: number; limit?: number }) => void;
+  updateSearchQuery: (searchQuery?: string) => void;
+};
+export const TaskContext = createContext<TaskContextType>({
+  page: 1,
+  limit: 10,
+  query: null,
+  updatePagination: () => {},
+  updateSearchQuery: () => {},
+});
 
 const DashboardHome = () => {
-  const { data: tasks, isLoading } = useGetTasksQuery();
+  const [taskFilter, setTaskFilter] = useState<{
+    page: number;
+    limit: number;
+    query: string | null;
+  }>({
+    page: 1,
+    limit: 10,
+    query: null,
+  });
+  const queryString = prepareQuery(taskFilter);
+  const { data, isLoading } = useGetTasksQuery({ queryString });
+  const updatePagination = (pagination: {
+    page?: number;
+    limit?: number;
+  }): void => {
+    const { page, limit } = pagination;
+    setTaskFilter({
+      ...taskFilter,
+      ...(page && { page }),
+      ...(limit && { limit }),
+    });
+  };
+  const updateSearchQuery = (searchQuery?: string) => {
+    if (searchQuery) {
+      setTaskFilter({ ...taskFilter, query: searchQuery });
+    }
+  };
 
-  useEffect(() => {
-    async function subscribeUser() {}
-    subscribeUser();
-    return () => {
-      subscribeUser();
-    };
-  }, []);
+  const tasks = data?.data.tasks;
+  const totalPages = data?.data.totalPages;
 
   if (isLoading) {
     return (
@@ -66,7 +105,7 @@ const DashboardHome = () => {
     );
   }
 
-  if (tasks?.data.length === 0) {
+  if (tasks?.length === 0) {
     return (
       <div className="mt-10">
         <h3 className="mb-5 text-3xl font-semibold">No Task Found</h3>
@@ -76,9 +115,12 @@ const DashboardHome = () => {
   }
 
   return (
-    <section className="">
+    <TaskContext.Provider
+      value={{ ...taskFilter, updatePagination, updateSearchQuery }}
+    >
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-3xl font-semibold">Task List</h3>
+        <SearchInput />
         <div className="flex flex-wrap items-center gap-3 lg:gap-5">
           <TaskStatusDropdown />
           <AddTaskForm />
@@ -86,11 +128,15 @@ const DashboardHome = () => {
       </div>
 
       <div className="task-card-wrapper mt-6 grid gap-4 sm:grid-cols-2 lg:mt-9 lg:grid-cols-3">
-        {tasks?.data.map((task) => (
+        {tasks?.map((task) => (
           <TaskCard key={task?._id} task={task} />
         ))}
       </div>
-    </section>
+
+      <div className="mt-10 pb-8">
+        <Pagination props={{ totalPages: totalPages as number }} />
+      </div>
+    </TaskContext.Provider>
   );
 };
 

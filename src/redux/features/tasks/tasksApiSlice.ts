@@ -4,8 +4,11 @@ import { ITask } from "@/interfaces/task.interface";
 
 const tasksApiSlice = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTasks: builder.query<Response<ITask[]>, void>({
-      query: () => "/tasks",
+    getTasks: builder.query<
+      Response<{ tasks: ITask[]; totalPages: number }>,
+      { queryString?: string }
+    >({
+      query: ({ queryString }) => `/tasks${queryString}`,
       providesTags: ["Task"],
     }),
     getTaskById: builder.query<Response<ITask>, { id: string }>({
