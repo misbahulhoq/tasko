@@ -4,6 +4,7 @@ import {
   useRequestNewOtpMutation,
   useVerifyLoginCodeMutation,
 } from "@/redux/features/auth/authApiSlice";
+import { setUser } from "@/redux/store/userSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
@@ -99,6 +100,8 @@ const VerifyOtpPage = () => {
       .then((res) => {
         console.log(res);
         if (res.success) {
+          console.log(res.data);
+          setUser(res.data);
           Swal.fire({
             icon: "success",
             title: "Success",
@@ -106,7 +109,7 @@ const VerifyOtpPage = () => {
           }).then(() => {
             setTimeout(() => {
               router.push("/dashboard");
-            }, 100);
+            }, 500);
           });
         }
       })
