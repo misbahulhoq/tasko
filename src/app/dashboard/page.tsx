@@ -1,27 +1,48 @@
 "use client";
 import TaskCard from "@/components/dashboard/TaskCard";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useGetTasksQuery } from "@/redux/features/tasks/tasksApiSlice";
 import AddTaskForm from "@/components/dashboard/AddTaskForm";
 import SearchInput from "@/components/dashboard/SearchInput";
 import Pagination from "@/components/dashboard/Pagination";
 import { prepareQuery } from "@/utils/prepareQuery";
 import { TaskFilterContext } from "@/context/TaskFilterContext";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import TaskStatusDropdown from "@/components/dashboard/TaskStatusDropdown";
 
 const DashboardHome = () => {
+  const searchParams = useSearchParams();
   const [taskFilter, setTaskFilter] = useState<{
-    page: number;
-    limit: number;
+    page: string | null;
+    limit: string | null;
     query: string | null;
+    status: string | null;
   }>({
-    page: 1,
-    limit: 10,
-    query: null,
+    page: searchParams.get("page"),
+    limit: searchParams.get("pageSize"),
+    query: searchParams.get("query"),
+    status: searchParams.get("status"),
   });
+
   const queryString = prepareQuery(taskFilter);
   const { data, isLoading } = useGetTasksQuery({ queryString });
-  const params = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(`${queryString}`);
+  }, [queryString, router]);
+
+  const pathName = usePathname();
+  const createQueryString = useCallback(
+    () => (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const test = searchParams.get("page");
   const updatePagination = (pagination: {
     page?: number;
     limit?: number;
@@ -97,7 +118,12 @@ const DashboardHome = () => {
 
   return (
     <TaskFilterContext.Provider
-      value={{ ...taskFilter, updatePagination, updateSearchQuery }}
+      value={{
+        ...taskFilter,
+        updatePagination,
+        updateSearchQuery,
+        createQueryString,
+      }}
     >
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-3xl font-semibold">Task List</h3>
@@ -118,87 +144,6 @@ const DashboardHome = () => {
         <Pagination props={{ totalPages: totalPages as number }} />
       </div>
     </TaskFilterContext.Provider>
-  );
-};
-
-const taskStatus = [
-  {
-    name: "All Task",
-    slug: "",
-  },
-  {
-    name: "Pending",
-    slug: "pending",
-  },
-  {
-    name: "Ongoing",
-    slug: "ongoing",
-  },
-  {
-    name: "Done",
-    slug: "done",
-  },
-];
-
-const TaskStatusDropdown = () => {
-  const [selectedCategory, setSelectedCategory] = useState<{
-    name: string;
-    slug: string;
-  } | null>(taskStatus[0]);
-
-  const handleSelect = (category: { name: string; slug: string }) => {
-    setSelectedCategory(category);
-  };
-
-  return (
-    <div className="dropdown dropdown-end dropdown-hover w-28 rounded-lg border border-gray-300 shadow">
-      <div
-        tabIndex={0}
-        role="button"
-        className="btn btn-ghost w-full justify-between px-2"
-      >
-        {selectedCategory?.name}
-        {/* Chevron down icon */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-4 w-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m19.5 8.25-7.5 7.5-7.5-7.5"
-          />
-        </svg>
-      </div>
-      <ul
-        tabIndex={0}
-        className="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow-lg"
-      >
-        {taskStatus.map((category) => (
-          <li key={category.slug} onClick={() => handleSelect(category)}>
-            <a
-              className={
-                selectedCategory?.slug === category.slug
-                  ? "bg-primary text-primary-content"
-                  : ""
-              }
-            >
-              <input
-                type="checkbox"
-                readOnly
-                checked={selectedCategory?.slug === category.slug}
-                className="checkbox checkbox-primary"
-              />
-              {category.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 };
 

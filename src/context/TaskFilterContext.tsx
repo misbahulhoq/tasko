@@ -6,6 +6,7 @@ type TaskContextType = {
   query: string | null;
   updatePagination: (pagination: { page?: number; limit?: number }) => void;
   updateSearchQuery: (searchQuery?: string) => void;
+  createQueryString: () => (name: string, value: string) => string;
 };
 
 export const TaskFilterContext = createContext<TaskContextType>({
@@ -14,4 +15,5 @@ export const TaskFilterContext = createContext<TaskContextType>({
   query: null,
   updatePagination: () => {},
   updateSearchQuery: () => {},
+  createQueryString: () => () => "",
 });
