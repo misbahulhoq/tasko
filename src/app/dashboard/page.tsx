@@ -7,6 +7,7 @@ import SearchInput from "@/components/dashboard/SearchInput";
 import Pagination from "@/components/dashboard/Pagination";
 import { prepareQuery } from "@/utils/prepareQuery";
 import { TaskFilterContext } from "@/context/TaskFilterContext";
+import { useSearchParams } from "next/navigation";
 
 const DashboardHome = () => {
   const [taskFilter, setTaskFilter] = useState<{
@@ -20,6 +21,7 @@ const DashboardHome = () => {
   });
   const queryString = prepareQuery(taskFilter);
   const { data, isLoading } = useGetTasksQuery({ queryString });
+  const params = useSearchParams();
   const updatePagination = (pagination: {
     page?: number;
     limit?: number;
@@ -39,8 +41,8 @@ const DashboardHome = () => {
     }
   };
 
-  const tasks = data?.data.tasks;
-  const totalPages = data?.data.totalPages;
+  const tasks = data?.data?.tasks;
+  const totalPages = data?.data?.totalPages;
 
   if (isLoading) {
     return (
@@ -137,6 +139,7 @@ const taskStatus = [
     slug: "done",
   },
 ];
+
 const TaskStatusDropdown = () => {
   const [selectedCategory, setSelectedCategory] = useState<{
     name: string;

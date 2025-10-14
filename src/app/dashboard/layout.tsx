@@ -10,7 +10,6 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useAppSelector((state) => state.user);
   const router = useRouter();
   if (isLoading) return null;
-
   if (!user) {
     setTimeout(() => {
       router.push("/login");

@@ -1,4 +1,5 @@
 "use client";
+import { useAppDispatch } from "@/hooks/redux.hook";
 import {
   useGetUserEmailQuery,
   useRequestNewOtpMutation,
@@ -31,6 +32,7 @@ const VerifyOtpPage = () => {
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const {
     data: user,
     isLoading,
@@ -98,17 +100,16 @@ const VerifyOtpPage = () => {
     verifyAccount({ code: fullOtp })
       .unwrap()
       .then((res) => {
-        console.log(res);
         if (res.success) {
           console.log(res.data);
-          setUser(res.data);
+          dispatch(setUser(res.data));
           Swal.fire({
             icon: "success",
             title: "Success",
             text: res.message,
           }).then(() => {
             setTimeout(() => {
-              router.push("/dashboard");
+              router.push("/dashboard?page=1&pageSize=10&status=all");
             }, 500);
           });
         }

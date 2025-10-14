@@ -14,7 +14,6 @@ export const useFetchUser = () => {
           dispatch(setUser(res?.data));
         })
         .catch((err) => {
-          console.log(err);
           dispatch(setUser(null));
         });
     }

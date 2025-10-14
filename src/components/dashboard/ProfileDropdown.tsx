@@ -157,7 +157,7 @@ export default function ProfileDropdown() {
         <div className="mx-4 border-t border-gray-100"></div>
 
         {/* Logout */}
-        <div className="p-2">
+        <div className="p-2" onClick={handleLogOut}>
           <button
             className="group flex w-full items-center space-x-3 rounded-xl px-3 py-3 transition-all duration-200 hover:bg-red-50"
             onClick={() => setIsOpen(false)}
@@ -168,7 +168,6 @@ export default function ProfileDropdown() {
             <span
               id="logout"
               className="text-sm font-medium text-gray-700 transition-colors duration-200 group-hover:text-red-600"
-              onClick={handleLogOut}
             >
               Log Out
             </span>
