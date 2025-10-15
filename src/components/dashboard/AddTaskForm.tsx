@@ -134,6 +134,7 @@ const AddTaskForm: React.FC = () => {
                 className="input input-primary"
                 {...register("startDate", {
                   required: "Start Date is required",
+                  valueAsDate: true,
                 })}
               />
               {errors.startDate && (
@@ -186,7 +187,7 @@ const AddTaskForm: React.FC = () => {
                 className="btn btn-primary"
                 disabled={isLoading}
               >
-                Save
+                {isLoading ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
