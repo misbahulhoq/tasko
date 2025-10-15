@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { TaskFilterContext } from "@/context/TaskFilterContext";
+import { useSearchParams } from "next/navigation";
+import React, { useContext } from "react";
 
 const taskStatus = [
   {
     name: "All Task",
-    slug: "",
+    slug: "all",
   },
   {
     name: "Pending",
@@ -18,18 +20,21 @@ const taskStatus = [
     slug: "done",
   },
 ];
+
 const TaskStatusDropdown = () => {
-  const [selectedCategory, setSelectedCategory] = useState<{
-    name: string;
-    slug: string;
-  } | null>(taskStatus[0]);
+  const searchParams = useSearchParams();
+  const selectedCategory = taskStatus.filter(
+    (item) => item.slug === searchParams.get("status"),
+  )[0];
+
+  const { createQueryString } = useContext(TaskFilterContext);
 
   const handleSelect = (category: { name: string; slug: string }) => {
-    setSelectedCategory(category);
+    createQueryString()("status", category.slug);
   };
 
   return (
-    <div className="dropdown dropdown-end dropdown-hover w-28 rounded-lg border border-gray-300 shadow">
+    <div className="dropdown dropdown-start dropdown-hover w-28 rounded-lg border border-gray-300 shadow">
       <div
         tabIndex={0}
         role="button"
