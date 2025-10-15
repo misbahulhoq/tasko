@@ -13,7 +13,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   if (!user) {
     setTimeout(() => {
       router.push("/login");
-    }, 500);
+    });
   }
 
   return (
@@ -21,8 +21,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <div className="container-center lg:relative lg:top-0 lg:z-10">
         <DashboardNav />
       </div>
-      {/* welcome message */}
 
+      {/* welcome message */}
       <div className={`container-center relative z-10 mt-8 hidden lg:block`}>
         <WelcomeMessage user={user} isLoading={isLoading} />
       </div>
