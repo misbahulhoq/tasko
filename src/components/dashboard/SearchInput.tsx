@@ -4,13 +4,13 @@ import React, { useContext } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TaskFilterContext } from "@/context/TaskFilterContext";
 const SearchInput = () => {
-  const { updateSearchQuery, query, createQueryString } =
-    useContext(TaskFilterContext);
+  const { createQueryString, removeQuery } = useContext(TaskFilterContext);
+  const [search, setSearch] = React.useState("");
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    createQueryString()("search", value);
     setTimeout(() => {
-      updateSearchQuery(value);
+      setSearch(value);
+      createQueryString()("search", value);
     }, 500);
   };
   const handleInputClear = () => {
@@ -20,11 +20,13 @@ const SearchInput = () => {
 
     // It's a good practice to check if the element was actually found
     if (searchInput) {
+      setSearch("");
       searchInput.value = "";
+      removeQuery("search");
       searchInput.blur();
     }
-    updateSearchQuery(undefined);
   };
+
   return (
     <label className="input !rounded-md">
       <svg
@@ -50,7 +52,7 @@ const SearchInput = () => {
         className="rounded-full"
         onInput={handleSearch}
       />
-      {query?.length && (
+      {search?.length > 0 && (
         <XMarkIcon
           height={20}
           onClick={handleInputClear}

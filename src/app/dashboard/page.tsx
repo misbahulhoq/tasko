@@ -7,7 +7,7 @@ import SearchInput from "@/components/dashboard/SearchInput";
 import Pagination from "@/components/dashboard/Pagination";
 import { prepareQuery } from "@/utils/prepareQuery";
 import { TaskFilterContext } from "@/context/TaskFilterContext";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import TaskStatusDropdown from "@/components/dashboard/TaskStatusDropdown";
 
 const DashboardHome = () => {
@@ -15,12 +15,12 @@ const DashboardHome = () => {
   const [taskFilter, setTaskFilter] = useState<{
     page: string | null;
     limit: string | null;
-    query: string | null;
+    search: string | null;
     status: string | null;
   }>({
     page: searchParams.get("page"),
     limit: searchParams.get("pageSize"),
-    query: searchParams.get("query"),
+    search: searchParams.get("search"),
     status: searchParams.get("status"),
   });
 
@@ -32,34 +32,41 @@ const DashboardHome = () => {
     router.push(`${queryString}`);
   }, [queryString, router]);
 
-  const pathName = usePathname();
   const createQueryString = useCallback(
     () => (name: string, value: string) => {
       const params = new URLSearchParams(searchParams);
+      if (name === "search") {
+        setTimeout(() => {
+          setTaskFilter((prev) => {
+            return {
+              ...prev,
+              [name]: value,
+            };
+          });
+        }, 500);
+      } else {
+        setTaskFilter((prev) => {
+          return {
+            ...prev,
+            [name]: value,
+          };
+        });
+      }
       params.set(name, value);
       return params.toString();
     },
     [searchParams],
   );
 
-  const test = searchParams.get("page");
-  const updatePagination = (pagination: {
-    page?: number;
-    limit?: number;
-  }): void => {
-    const { page, limit } = pagination;
-    setTaskFilter({
-      ...taskFilter,
-      ...(page && { page }),
-      ...(limit && { limit }),
+  const removeQuery = (name: string) => {
+    setTaskFilter((prev) => {
+      const params = new URLSearchParams(searchParams);
+      params.delete(name);
+      return {
+        ...prev,
+        [name]: null,
+      };
     });
-  };
-  const updateSearchQuery = (searchQuery?: string) => {
-    if (searchQuery) {
-      setTaskFilter({ ...taskFilter, query: searchQuery });
-    } else {
-      setTaskFilter({ ...taskFilter, query: null });
-    }
   };
 
   const tasks = data?.data?.tasks;
@@ -119,10 +126,8 @@ const DashboardHome = () => {
   return (
     <TaskFilterContext.Provider
       value={{
-        ...taskFilter,
-        updatePagination,
-        updateSearchQuery,
         createQueryString,
+        removeQuery,
       }}
     >
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
