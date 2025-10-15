@@ -124,6 +124,15 @@ const DashboardHome = () => {
     );
   }
 
+  if (tasks?.length === 0) {
+    return (
+      <div className="mt-10">
+        <h1 className="text-center text-2xl font-semibold">No Task Found</h1>
+        <AddTaskForm />
+      </div>
+    );
+  }
+
   return (
     <TaskFilterContext.Provider
       value={{
