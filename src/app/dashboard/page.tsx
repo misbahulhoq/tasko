@@ -126,7 +126,7 @@ const DashboardHome = () => {
 
   if (tasks?.length === 0) {
     return (
-      <div className="mt-10">
+      <div className="mt-10 flex flex-col items-center justify-center gap-5">
         <h1 className="text-center text-2xl font-semibold">No Task Found</h1>
         <AddTaskForm />
       </div>
