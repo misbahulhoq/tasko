@@ -134,15 +134,6 @@ const AddTaskForm: React.FC = () => {
                 className="input input-primary"
                 {...register("startDate", {
                   required: "Start Date is required",
-                  valueAsDate: true,
-                  validate: (value) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return (
-                      value.getTime() >= today.getTime() ||
-                      "Start date cannot be in the past."
-                    );
-                  },
                 })}
               />
               {errors.startDate && (
