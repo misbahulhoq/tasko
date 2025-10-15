@@ -13,14 +13,11 @@ const Pagination = ({ props }: { props: PaginationProps }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const { createQueryString } = useContext(TaskFilterContext);
 
-  console.log(limit);
-
   const updatePage = (page: number) => {
     createQueryString()("page", page.toString());
   };
   const updateLimit: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const value = e.target.value;
-    console.log(value);
     createQueryString()("limit", value);
   };
 
