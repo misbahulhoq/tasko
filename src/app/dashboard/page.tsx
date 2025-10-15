@@ -9,19 +9,20 @@ import { prepareQuery } from "@/utils/prepareQuery";
 import { TaskFilterContext } from "@/context/TaskFilterContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import TaskStatusDropdown from "@/components/dashboard/TaskStatusDropdown";
+import Link from "next/link";
 
 const DashboardHome = () => {
   const searchParams = useSearchParams();
   const [taskFilter, setTaskFilter] = useState<{
-    page: string | null;
-    limit: string | null;
+    page: string;
+    limit: string;
     search: string | null;
-    status: string | null;
+    status: string;
   }>({
-    page: searchParams.get("page"),
-    limit: searchParams.get("pageSize"),
+    page: searchParams.get("page") || "1",
+    limit: searchParams.get("limit") || "10",
     search: searchParams.get("search"),
-    status: searchParams.get("status"),
+    status: searchParams.get("status") || "all",
   });
 
   const queryString = prepareQuery(taskFilter);
@@ -30,7 +31,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     router.push(`${queryString}`);
-  }, [queryString, router]);
+  }, [queryString, router, searchParams]);
 
   const createQueryString = useCallback(
     () => (name: string, value: string) => {
@@ -131,7 +132,20 @@ const DashboardHome = () => {
       }}
     >
       <div className="top-part flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-3xl font-semibold">Task List</h3>
+        <Link
+          href={"/dashboard/"}
+          className="text-2xl font-semibold underline"
+          onNavigate={() => {
+            setTaskFilter((prev) => {
+              return {
+                ...prev,
+                search: null,
+              };
+            });
+          }}
+        >
+          Task List
+        </Link>
         <SearchInput />
         <div className="flex flex-wrap items-center gap-3 lg:gap-5">
           <TaskStatusDropdown />
@@ -146,7 +160,13 @@ const DashboardHome = () => {
       </div>
 
       <div className="mt-10 pb-8">
-        <Pagination props={{ totalPages: totalPages as number }} />
+        <Pagination
+          props={{
+            totalPages: totalPages as number,
+            limit: taskFilter.limit,
+            queryPage: taskFilter.page,
+          }}
+        />
       </div>
     </TaskFilterContext.Provider>
   );

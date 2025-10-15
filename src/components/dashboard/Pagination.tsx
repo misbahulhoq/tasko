@@ -4,16 +4,25 @@ import { TaskFilterContext } from "@/context/TaskFilterContext";
 import React, { useContext } from "react";
 
 interface PaginationProps {
+  queryPage: string;
+  limit: string;
   totalPages: number;
 }
 const Pagination = ({ props }: { props: PaginationProps }) => {
-  const { totalPages } = props;
+  const { totalPages, limit, queryPage } = props;
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const {
-    page: queryPage,
-    limit,
-    updatePagination,
-  } = useContext(TaskFilterContext);
+  const { createQueryString } = useContext(TaskFilterContext);
+
+  console.log(limit);
+
+  const updatePage = (page: number) => {
+    createQueryString()("page", page.toString());
+  };
+  const updateLimit: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    createQueryString()("limit", value);
+  };
 
   return (
     <section className="flex flex-wrap items-center justify-between gap-3 lg:gap-5">
@@ -22,8 +31,10 @@ const Pagination = ({ props }: { props: PaginationProps }) => {
           return (
             <button
               key={index}
-              className={`join-item btn ${page === queryPage && "btn-active"}`}
-              onClick={() => updatePagination({ page })}
+              className={`join-item btn ${page === Number(queryPage) && "btn-active"}`}
+              onClick={() => {
+                updatePage(page);
+              }}
             >
               {page}
             </button>
@@ -32,15 +43,17 @@ const Pagination = ({ props }: { props: PaginationProps }) => {
       </div>
 
       <select
-        defaultValue={`${limit} per page`}
+        defaultValue={limit}
         className="select w-[180px]"
-        onChange={(e) => {
-          updatePagination({ limit: Number(e.target.value) });
-        }}
+        onChange={updateLimit}
       >
-        <option value={10}>10 items per page</option>
-        <option value={5}>5 items per page</option>
-        <option value={20}>20 items per page</option>
+        {[5, 10, 20].map((_limit, index) => {
+          return (
+            <option key={index} value={_limit}>
+              {_limit} items per page
+            </option>
+          );
+        })}
       </select>
     </section>
   );
