@@ -5,7 +5,7 @@ export async function subscribeUser(email: string) {
     alert("Service Workers are not supported in this browser.");
     return;
   }
-  const registration = await navigator.serviceWorker.register("./sw.js");
+  const registration = await navigator.serviceWorker.register("/sw.js");
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: process.env.NEXT_PUBLIC_VAPID_KEY,

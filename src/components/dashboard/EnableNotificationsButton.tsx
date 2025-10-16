@@ -33,7 +33,7 @@ const EnableNotificationsButton = ({ closeModal }: Props) => {
     >
       <div className="flex items-center space-x-3">
         <div className="rounded-lg bg-gray-50 p-2 transition-all duration-200 group-hover:bg-white group-hover:shadow-md">
-          <BellAlertIcon className="h-4 w-4 text-gray-600 transition-colors duration-200 group-hover:text-violet-600" />{" "}
+          <BellAlertIcon className="h-4 w-4 text-gray-600 transition-colors duration-200 group-hover:text-violet-600" />
         </div>
         <span className="text-sm font-medium text-gray-700 transition-colors duration-200 group-hover:text-gray-900">
           Enable Notifications
