@@ -11,13 +11,15 @@ import { useLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import EnableNotificationsButton from "./EnableNotificationsButton";
-import { useAppSelector } from "@/hooks/redux.hook";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import { setUser } from "@/redux/store/userSlice";
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAppSelector((state) => state.user);
   const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export default function ProfileDropdown() {
         logout()
           .unwrap()
           .then(() => {
+            dispatch(setUser(null));
             router.push("/login");
           })
           .catch(console.error);
